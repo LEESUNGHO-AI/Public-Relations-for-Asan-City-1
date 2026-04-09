@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>아산시 강소형 스마트시티 — 이노베이션 스퀘어</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap');
+:root{--p:#00d4aa;--a:#00b4ff;--d:#07090f;--l:#e6edf3;--m:#8b949e}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#fff;font-family:'Noto Sans KR',sans-serif}
+#cinema{width:100%;height:100%;position:relative;overflow:hidden}
+
+/* Scene layers - use opacity for instant crossfade */
+.sc{position:absolute;inset:0;opacity:0;z-index:1;overflow:hidden;
+  transition:opacity .6s ease-in-out}
+.sc.on{opacity:1;z-index:10}
+.sc .bg{position:absolute;inset:-50px;background-size:cover;background-position:center;
+  filter:brightness(.4) saturate(1.15);will-change:transform;
+  transition:none}
+.sc.on .bg{animation:kb 30s ease-in-out forwards}
+@keyframes kb{0%{transform:scale(1)}100%{transform:scale(1.12) translate(-15px,-10px)}}
+.sc .ov{position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(0,0,0,.2) 0%,rgba(0,0,0,.08) 30%,rgba(0,0,0,.4) 60%,rgba(0,0,0,.82) 100%);z-index:2}
+.sc .ct{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;justify-content:center;align-items:center;
+  padding:50px 80px 110px}
+
+/* Text animations */
+.sl{font-family:'Rajdhani';font-size:clamp(11px,1.2vw,15px);letter-spacing:8px;text-transform:uppercase;
+  color:var(--p);font-weight:600;margin-bottom:14px;
+  opacity:0;transform:translateY(14px);transition:all .5s .1s}
+.sc.on .sl{opacity:1;transform:translateY(0)}
+.st{font-size:clamp(30px,4.8vw,68px);font-weight:900;text-align:center;line-height:1.15;
+  text-shadow:0 4px 40px rgba(0,0,0,.7);
+  opacity:0;transform:translateY(20px);transition:all .6s .2s}
+.sc.on .st{opacity:1;transform:translateY(0)}
+.st .h{background:linear-gradient(135deg,var(--p),var(--a));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.sd{font-size:clamp(14px,1.5vw,20px);font-weight:300;text-align:center;max-width:850px;line-height:1.75;
+  margin-top:18px;color:rgba(255,255,255,.85);text-shadow:0 2px 20px rgba(0,0,0,.5);
+  opacity:0;transform:translateY(14px);transition:all .5s .5s}
+.sc.on .sd{opacity:1;transform:translateY(0)}
+.pills{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:22px;
+  opacity:0;transition:all .5s .7s}
+.sc.on .pills{opacity:1}
+.pill{font-size:clamp(12px,1.1vw,15px);padding:8px 22px;border-radius:50px;font-weight:500;
+  backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.15)}
+.pill.g{background:rgba(0,212,170,.18);color:var(--p);border-color:rgba(0,212,170,.3)}
+.pill.b{background:rgba(0,180,255,.18);color:var(--a);border-color:rgba(0,180,255,.3)}
+.pill.w{background:rgba(255,255,255,.08);color:rgba(255,255,255,.9)}
+
+/* Stats */
+.sr2{display:flex;gap:clamp(24px,4vw,56px);margin-top:36px;opacity:0;transition:all .5s .6s}
+.sc.on .sr2{opacity:1}
+.stat{text-align:center}
+.stat-n{font-family:'Orbitron';font-size:clamp(32px,4.5vw,60px);font-weight:900;
+  background:linear-gradient(135deg,var(--p),var(--a));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stat-u{font-family:'Orbitron';font-size:clamp(12px,1.2vw,18px);color:var(--p)}
+.stat-l{font-size:clamp(12px,1.1vw,16px);color:rgba(255,255,255,.55);margin-top:4px}
+
+/* Route */
+.route{display:flex;align-items:center;gap:0;margin-top:36px;opacity:0;transition:all .5s .6s}
+.sc.on .route{opacity:1}
+.rs{text-align:center;min-width:clamp(100px,12vw,160px)}
+.rs .ri{font-size:clamp(28px,3vw,42px);margin-bottom:6px}
+.rs h4{font-size:clamp(13px,1.2vw,17px);font-weight:700}
+.rs p{font-size:clamp(10px,.9vw,14px);color:rgba(255,255,255,.5)}
+.ra{font-size:clamp(20px,2.5vw,32px);color:var(--p);margin:0 clamp(4px,1vw,12px) 24px;opacity:.5;animation:ap 1.5s infinite}
+@keyframes ap{0%,100%{opacity:.3}50%{opacity:.8}}
+
+/* Timeline */
+.tl{display:flex;align-items:center;gap:0;margin-top:32px;opacity:0;transition:all .5s .8s}
+.sc.on .tl{opacity:1}
+.td{display:flex;flex-direction:column;align-items:center}
+.tc{width:14px;height:14px;border-radius:50%;background:var(--p);box-shadow:0 0 12px var(--p)}
+.ty{font-family:'Orbitron';font-size:12px;color:var(--p);margin-top:8px;font-weight:600}
+.tx{font-size:11px;color:rgba(255,255,255,.45);margin-top:2px}
+.tll{width:clamp(40px,6vw,80px);height:2px;background:linear-gradient(90deg,var(--p),rgba(0,212,170,.2));margin-bottom:28px}
+
+/* Consortium */
+.cg{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-top:28px;opacity:0;transition:all .5s .6s}
+.sc.on .cg{opacity:1}
+.cc{background:rgba(255,255,255,.06);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.1);
+  border-radius:14px;padding:18px 24px;text-align:center;min-width:clamp(130px,14vw,170px)}
+.cc h4{font-size:clamp(13px,1.2vw,16px);font-weight:700;margin-bottom:2px}
+.cc .cr{font-size:clamp(9px,.8vw,11px);color:var(--p)}
+.cc p{font-size:clamp(10px,.9vw,13px);color:rgba(255,255,255,.5);margin-top:4px}
+
+/* Subtitle */
+#sub{position:fixed;bottom:48px;left:50%;transform:translateX(-50%);
+  background:rgba(0,0,0,.72);backdrop-filter:blur(20px);
+  padding:14px 40px;border-radius:8px;max-width:880px;width:92%;
+  text-align:center;z-index:100;border:1px solid rgba(255,255,255,.05)}
+#sub .stx{font-size:clamp(13px,1.2vw,16px);line-height:1.65;color:rgba(255,255,255,.88)}
+.spk{margin-right:8px;opacity:.4}.spk.on{animation:sp 1s infinite}
+@keyframes sp{0%,100%{opacity:.3}50%{opacity:1}}
+
+/* Controls */
+#cz{position:fixed;bottom:0;left:0;right:0;height:44px;background:rgba(0,0,0,.92);
+  backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center;gap:12px;
+  z-index:100;border-top:1px solid rgba(255,255,255,.05)}
+#cz button{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
+  color:#fff;padding:5px 18px;border-radius:5px;font-size:12px;cursor:pointer;
+  font-family:'Noto Sans KR';transition:all .2s}
+#cz button:hover{background:rgba(0,212,170,.15);border-color:var(--p);color:var(--p)}
+#cz .py{background:linear-gradient(135deg,var(--p),var(--a));border:none;color:#000;font-weight:700;padding:5px 28px}
+#cz .py:hover{transform:scale(1.03);box-shadow:0 0 16px rgba(0,212,170,.3)}
+.hu{font-family:'Orbitron';font-size:10px;color:rgba(255,255,255,.35);letter-spacing:2px;margin:0 16px}
+#prg{position:fixed;bottom:44px;left:0;height:2px;background:linear-gradient(90deg,var(--p),var(--a));
+  z-index:101;transition:width .3s linear;box-shadow:0 0 8px var(--p)}
+
+@media(max-width:900px){.sc .ct{padding:32px 24px 100px}.sr2,.route{flex-wrap:wrap;justify-content:center}.cg{gap:8px}}
+</style>
+</head>
+<body>
+<div id="cinema">
+
+<div class="sc on" data-s="0"><div class="bg" style="background-image:url('https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=1920&q=80')"></div><div class="ov"></div><div class="ct"><div class="sl">국토교통부 | 2023 강소형 스마트시티 조성사업</div><h1 class="st"><span class="h">아산시</span> 강소형<br>스마트시티</h1><p class="sd">디지털 OASIS 구현을 통한 지역경제 활성화와<br>데이터 기반 스마트시티 조성</p><div class="pills"><span class="pill g">총사업비 240억원</span><span class="pill b">2개 혁신 거점</span><span class="pill w">17개 단위사업</span><span class="pill g">5개 참여기관</span></div></div></div>
+
+<div class="sc" data-s="1"><div class="bg" style="background-image:url('https://images.unsplash.com/photo-1518156677180-95a2893f3e9f?w=1920&q=80')"></div><div class="ov"></div><div class="ct"><div class="sl">CHALLENGE</div><h1 class="st">아산시가<br><span class="h">마주한 과제</span></h1><p class="sd">서남생활권 인구 10년간 20% 감소, 동서 발전 격차 심화<br>관계인구 유입을 통한 지역소멸 극복이 절실합니다</p><div class="pills"><span class="pill w">📉 인구 33,437→27,208명</span><span class="pill w">⚖️ 동서 불균형</span><span class="pill w">📡 디지털 전환</span></div></div></div>
+
+<div class="sc" data-s="2"><div class="bg" style="background-image:url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1920&q=80')"></div><div class="ov"></div><div class="ct"><div class="sl">DIGITAL OASIS — Office · Activity · Study · Innovation · Spot</div><h1 class="st">도고와 배방을 잇는<br><span class="h">스마트 회랑</span></h1><p class="sd">일하고, 쉬고, 배우는 모든 것이 가능한 워케이션 거점<br>데이터 기반 스마트 서비스와 창업 생태계</p><div class="pills"><span class="pill g">🌴 디지털 OASIS Zone · 도고</span><span class="pill b">🚀 이노베이션 Zone · 배방</span></div></div></div>
+
+<div class="sc" data-s="3"><div class="bg" style="background-image:url('https://images.unsplash.com/photo-1540555700478-4be289fbec6d?w=1920&q=80')"></div><div class="ov"></div><div class="ct"><div class="sl">디지털 OASIS Zone · 도고면 기곡리</div><h1 class="st">온천마을의<br><span class="h">디지털 변신</span></h1><p class="sd"> 도고온전 인근 부지에 스마트하우스 30호 배치<br>온천과 자연 속 워케이션, AI CCTV·순찰로봇이 안전을 지킵니다</p><div class="pills"><span class="pill g">🏠 스마트하우스 30호</span><span class="pill g">💻 워케이션</span><span class="pill b">📹 AI 환경조성</span><span class="pill b">🤖 순찰로봇</span></div></div></div>
+
+<div class="sc" data-s="4"><div class="bg" style="background-image:url('https://images.unsplash.com/photo-1497366216548-37526070297c?w=1920&q=80')"></div><div class="ov"></div><div class="ct"><div class="sl">이노베이션 Zone · KTX역 도보 10분</div><h1 class="st">아산 이노베이션<br><span class="h">스퀘어</span></h1><p class="sd">B1 홍보관 · LED Wall · 서버실 | B2 공유오피스 · 오픈스튜디오<br>창업기업 유치와 비즈니스 인큐베이팅의 혁신 거점</p><div class="pills"><span class="pill b">🎬 LED Wall · 홍보관</span><span class="pill b">🖥️ 공유오피스</span><span class="pill g">📹 오픈스튜디오</span><span class="pill g">💡 비즈니스 인큐베이팅</span></div></div></div>
+
+<div class="sc" data-s="5"><div class="bg" style="background-image:url('https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1920&q=80')"></div><div class="ov"></div><div class="ct"><div class="sl">SMART PLATFORM</div><h1 class="st">도시를 연결하는<br><span class="h">통합 서비스</span></h1><p class="sd">모바일 전자시민증, 워케이션 운영 플랫폼, AI 시설관제<br>디지털 OASIS 정보관리 서비스가 도시 데이터를 분석합니다</p><div class="pills"><span class="pill g">📱 모바일 전자시민증</span><span class="pill b">💻 워케이션 플랫폼</span><span class="pill g">🛡️ AI 시설관제</span><span class="pill b">📊 정보관리 서비스</span></div></div></div>
+
+<div class="sc" data-s="6"><div class="bg" style="background-image:url('https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=1920&q=80')"></div><div class="ov"></div><div class="ct"><div class="sl">SMART MOBILITY</div><h1 class="st">부르면 오는 버스<br><span class="h">DRT 모빌리티</span></h1><div class="route"><div class="rs"><div class="ri">🚄</div><h4>KTX 천안아산역</h4><p>서울 36분</p></div><div class="ra">→</div><div class="rs"><div class="ri">🏢</div><h4>이노베이션 스퀘어</h4><p>배방 호서대</p></div><div class="ra">→</div><div class="rs"><div class="ri">🏪</div><h4>OASIS SPOT</h4><p>스마트하우스</p></div><div class="ra">→</div><div class="rs"><div class="ri">♨️</div><h4>도고온천</h4><p>힐링·관광</p></div></div></div></div>
+
+<div class="sc" data-s="7"><div class="bg" style="background-image:url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1920&q=80')"></div><div class="ov"></div><div class="ct"><div class="sl">CONSORTIUM</div><h1 class="st">민·관·학·연<br><span class="h">협력 생태계</span></h1><div class="cg"><div class="cc"><h4>아산시</h4><div class="cr">시행기관</div><p>사업총괄·예산집행</p></div><div class="cc"><h4>제일엔지니어링</h4><div class="cr">직접보조·PMO</div><p>사업관리·기술자문</p></div><div class="cc"><h4>호서대학교</h4><div class="cr">간접보조</div><p>이노베이션 스퀘어·리빙랩</p></div><div class="cc"><h4>충남연구원</h4><div class="cr">간접보조</div><p>거버넌스·정책연구</p></div><div class="cc"><h4>KAIST</h4><div class="cr">간접보조</div><p>첨단기술·AI자문</p></div></div></div></div>
+
+<div class="sc" data-s="8"><div class="bg" style="background-image:url('https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1920&q=80')"></div><div class="ov"></div><div class="ct"><div class="sl">LIVING LAB</div><h1 class="st">시민이 <span class="h">직접 만드는</span><br>스마트시티</h1><p class="sd">시민·기업·대학·행정이 함께 생활 속 문제를 발굴하고 해결합니다</p><div class="pills"><span class="pill g">🌱 서로의멘토 · 다문화</span><span class="pill b">🏘️ 다인연클럽 · 도시재생</span><span class="pill g">👩‍💻 엔드롭 · 청년정착</span><span class="pill b">📸 마실기록소 · 아카이빙</span><span class="pill g">🌸 온화미로 · 골목투어</span></div></div></div>
+
+<div class="sc" data-s="9"><div class="bg" style="background-image:url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1920&q=80')"></div><div class="ov"></div><div class="ct"><div class="sl">IMPACT</div><h1 class="st">숫자로 보는<br><span class="h">아산 스마트시티</span></h1><div class="sr2"><div class="stat"><div class="stat-n" data-t="240">0</div><div class="stat-u">억원</div><div class="stat-l">총 사업비</div></div><div class="stat"><div class="stat-n" data-t="17">0</div><div class="stat-u">개</div><div class="stat-l">단위사업</div></div><div class="stat"><div class="stat-n" data-t="1">0</div><div class="stat-u">식</div><div class="stat-l">AI 환경조성</div></div><div class="stat"><div class="stat-n" data-t="5">0</div><div class="stat-u">개</div><div class="stat-l">참여기관</div></div><div class="stat"><div class="stat-n" data-t="5">0</div><div class="stat-u">팀</div><div class="stat-l">리빙랩</div></div></div><div class="tl"><div class="td"><div class="tc"></div><div class="ty">2023.12</div><div class="tx">착수</div></div><div class="tll"></div><div class="td"><div class="tc"></div><div class="ty">2024</div><div class="tx">설계</div></div><div class="tll"></div><div class="td"><div class="tc"></div><div class="ty">2025</div><div class="tx">구축</div></div><div class="tll"></div><div class="td"><div class="tc" style="background:var(--a);box-shadow:0 0 12px var(--a)"></div><div class="ty" style="color:var(--a)">2026.12</div><div class="tx">완료</div></div></div></div></div>
+
+<div class="sc" data-s="10"><div class="bg" style="background-image:url('https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=1920&q=80')"></div><div class="ov"></div><div class="ct"><div class="sl">FOR CITIZENS</div><h1 class="st">시민의 일상이<br><span class="h">이렇게 바뀝니다</span></h1><p class="sd">전자시민증 하나로 편리하게 · AI와 순찰로봇이 24시간 안전<br>부르면 오는 버스 · 온천 옆 스마트하우스 워케이션</p><div class="pills"><span class="pill g">📱 전자시민증</span><span class="pill b">🤖 순찰로봇</span><span class="pill g">🚌 DRT 교통</span><span class="pill b">🏠 워케이션</span><span class="pill g">🌐 무료 Wi-Fi</span><span class="pill b">💡 리빙랩</span></div></div></div>
+
+<div class="sc" data-s="11"><div class="bg" style="background-image:url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80')"></div><div class="ov" style="background:radial-gradient(ellipse at center,rgba(0,0,0,.3),rgba(0,0,0,.7))"></div><div class="ct"><div class="sl">ASAN COMPACT SMART CITY</div><h1 class="st"><span class="h">스마트한 내일</span>,<br>아산에서 시작합니다</h1><div class="pills" style="margin-top:36px"><span class="pill w">아산시</span><span class="pill w">제일엔지니어링</span><span class="pill w">호서대학교</span><span class="pill w">충남연구원</span><span class="pill w">KAIST</span></div><p class="sd" style="margin-top:28px;font-size:14px;color:rgba(255,255,255,.35)">국토교통부 | 충청남도 | 아산시</p></div></div>
+
+</div>
+
+<div id="sub"><div class="stx"><span class="spk" id="si">🔊</span><span id="stxt">▶ 재생 버튼을 눌러 시작하세요</span></div></div>
+<div id="prg" style="width:0%"></div>
+<div id="cz">
+  <span class="hu" id="tmr">00:00 / 05:48</span>
+  <button onclick="pv()">◀ 이전</button>
+  <button class="py" id="pbtn" onclick="tp()">▶ 재생</button>
+  <button onclick="nx()">다음 ▶</button>
+  <button onclick="tm()" id="mb">🔇 음소거</button>
+  <span class="hu" id="scn">01 / 12</span>
+</div>
+
+<script>
+const NF=[
+"안녕하세요. 충청남도 아산시가 추진하는 강소형 스마트시티 조성사업을 소개합니다. 디지털 오아시스 구현을 통한 지역경제 활성화와 데이터 기반 스마트시티 조성. 국비와 지방비를 합쳐 총 240억 원이 투입되는 이 사업은, 국토교통부 공모를 통해 선정된 대규모 프로젝트입니다.",
+"아산시는 지금, 세 가지 과제에 직면해 있습니다. 도고온천 일대를 포함한 서남생활권의 인구가 10년간 20% 감소하면서, 지역소멸 위기에 놓여 있습니다. 동쪽 배방 신도시는 빠르게 성장하는 반면, 서쪽 도고 구도심과의 발전 격차는 점점 커지고 있고요. 이러한 문제를 스마트 기술로 해결하기 위해, 이 사업이 시작되었습니다.",
+"아산시는 두 곳에 혁신 거점을 만들고 있습니다. 서쪽 도고온천 일대에는 디지털 오아시스 존을 조성합니다. 오아시스는 오피스, 액티비티, 스터디, 이노베이션, 스팟의 머리글자로, 일하고 쉬고 배우는 모든 것이 가능한 워케이션 거점입니다. 동쪽 배방에는 이노베이션 존을 구축하여, 데이터 기반의 스마트 서비스와 창업 생태계를 만들어갑니다.",
+"도고 디지털 오아시스 존을 소개합니다. 파라다이스 스파 도고 인근 부지에, 이동식 체류형 스마트하우스가 들어섭니다. 스마트하우스 약 30호가 배치되어, 온천과 자연 속에서 일하며 쉬는 새로운 워케이션을 경험할 수 있습니다. AI CCTV와 스마트폴, 순찰로봇이 관광객의 안전을 지키고, 24시간 무인매장과 고속 와이파이 네트워크도 함께 구축됩니다.",
+"배방 이노베이션 존의 중심에는, KTX 천안아산역에서 도보 10분 거리에 위치한 아산 이노베이션 스퀘어가 있습니다. 호서대학교 온라인교육관에 만들어진 이 공간은, 지하 1층에 대형 LED 월과 스마트시티 홍보관, 회의실, 서버실을 갖추었고, 지하 2층에는 공유오피스와 오픈스튜디오, 크로마키 촬영 공간까지 마련되어 있습니다. 창업 기업을 유치하고 비즈니스 인큐베이팅을 지원하는, 아산의 혁신 거점입니다.",
+"두 거점을 하나로 연결하는 스마트 서비스를 소개합니다. 모바일 전자시민증은, 스마트폰 하나로 신분 확인부터 할인 혜택, 시설 예약까지 한 번에 해결할 수 있는 서비스입니다. 디지털 노마드를 위한 워케이션 접수와 운영, 거래 관리 플랫폼이 운영되고, AI 기반 시설 관제 시스템이 도시 전체를 실시간으로 모니터링합니다. 또한 관광과 교통, 환경 데이터를 수집하고 분석하는 디지털 오아시스 정보관리 서비스도 함께 운영됩니다.",
+"새로운 교통 서비스, DRT도 도입됩니다. DRT는 정해진 노선 없이, 앱으로 부르면 원하는 시간에 원하는 장소로 데려다주는 수요응답형 교통수단입니다. 지역 민간운수사업자와 아산시 마중버스를 연계하여, KTX 천안아산역에서 이노베이션 스퀘어를 거쳐, 오아시스 스팟과 도고온천까지, 아산의 동쪽과 서쪽을 하나로 연결합니다.",
+"이 사업은 다섯 개 기관이 힘을 합쳐 추진하고 있습니다. 아산시가 사업 전체를 총괄하고, 제일엔지니어링이 사업 관리와 기술 자문을 담당합니다. 호서대학교는 이노베이션 스퀘어 운영과 리빙랩 프로그램을, 충남연구원은 거버넌스 구축과 정책 연구를, 카이스트는 첨단 기술 연구와 자문을 맡고 있습니다.",
+"리빙랩은 시민이 직접 참여해서 우리 동네의 문제를 함께 찾고 해결하는 프로그램입니다. 지금 다섯 개 팀이 활동하고 있는데요, 다문화 가정을 연결하는 활동, 골목길 도시재생, 청년 정착 지원, 마을 이야기 디지털 기록, 그리고 숨은 골목 관광 코스 발굴까지. 시민의 아이디어가 실제 정책으로 이어지고 있습니다.",
+"아산 스마트시티를 숫자로 정리해 보겠습니다. 총 사업비 240억 원. 17개 단위사업. AI 환경조성. 5개 참여기관. 그리고 5개 리빙랩 팀이 함께하고 있습니다. 2023년 12월에 시작된 이 사업은, 2026년 12월 완료를 목표로 힘차게 나아가고 있습니다.",
+"이 모든 변화는, 결국 시민 여러분의 일상을 위한 것입니다. 전자시민증 하나로 편리하게 생활하고, AI와 순찰로봇이 24시간 우리 동네를 안전하게 지켜줍니다. 앱 하나로 부르는 스마트 버스, 온천 옆 스마트하우스에서 즐기는 워케이션, 그리고 내 아이디어가 실제 정책이 되는 도시. 이것이 아산 스마트시티가 그리는 시민의 내일입니다.",
+"스마트한 내일, 아산에서 시작합니다. 감사합니다."
+];
+
+// ====== AUDIO-DRIVEN SCENE ENGINE ======
+// Scenes advance ONLY when audio finishes playing.
+// Timer is for display only, NEVER triggers scene change.
+
+const audioPool={};
+let curA=null,mt=false;
+
+function preloadAll(){
+  let loaded=0;
+  for(let i=0;i<12;i++){
+    const a=new Audio();
+    a.preload='auto';
+    a.src='audio/s'+i+'.mp3';
+    a.addEventListener('canplaythrough',()=>{loaded++;},{once:true});
+    a.addEventListener('error',()=>{loaded++;},{once:true});
+    audioPool[i]=a;
+  }
+}
+preloadAll();
+
+function pa(i){
+  sa();
+  if(mt)return;
+  const a=audioPool[i];
+  if(!a)return;
+  a.currentTime=0;
+  curA=a;
+  a.onplay=()=>document.getElementById('si').className='spk on';
+  a.onended=()=>{
+    document.getElementById('si').className='spk';
+    // ★ THIS is the ONLY place that advances scenes
+    if(pl){
+      if(cur<tot-1){
+        // Wait 1.5 seconds after audio ends, then advance
+        setTimeout(()=>{
+          if(!pl)return; // user may have paused during the wait
+          cur++;se=0;
+          sa();ss(cur);pa(cur);
+        },1500);
+      } else {
+        // Last scene finished — stop playback
+        pl=false;
+        document.getElementById('pbtn').textContent='▶ 처음부터';
+        clearInterval(ti);
+        sa();
+        cur=0;el=0;se=0;
+        ss(0);uT();
+      }
+    }
+  };
+  a.play().catch(()=>{});
+}
+
+function sa(){
+  if(curA){curA.pause();curA.currentTime=0;curA=null}
+  document.getElementById('si').className='spk';
+}
+
+// ====== SCENE DISPLAY ======
+let cur=0,tot=12,pl=false,ti=null,el=0,se=0;
+
+function ss(i){
+  document.querySelectorAll('.sc').forEach(s=>{
+    s.classList.remove('on');
+    const bg=s.querySelector('.bg');
+    if(bg)bg.style.animation='none';
+  });
+  const s=document.querySelector(`[data-s="${i}"]`);
+  if(s){
+    s.classList.add('on');
+    const bg=s.querySelector('.bg');
+    if(bg){void bg.offsetWidth;bg.style.animation='kb 30s ease-in-out forwards'}
+  }
+  document.getElementById('scn').textContent=String(i+1).padStart(2,'0')+' / 12';
+  document.getElementById('stxt').textContent=NF[i];
+  if(s)s.querySelectorAll('.stat-n[data-t]').forEach((n,j)=>{
+    setTimeout(()=>{const t=parseInt(n.dataset.t);aN(n,0,t,1400)},600+j*180);
+  });
+}
+
+function aN(el,f,t,d){const s=performance.now();!function u(n){const p=Math.min((n-s)/d,1);el.textContent=Math.round(f+(t-f)*(1-Math.pow(1-p,3)));if(p<1)requestAnimationFrame(u)}(performance.now())}
+
+function nx(){if(cur<tot-1){cur++;se=0;sa();ss(cur);if(pl)pa(cur);uP()}}
+function pv(){if(cur>0){cur--;se=0;sa();ss(cur);if(pl)pa(cur);uP()}}
+
+function tp(){
+  const b=document.getElementById('pbtn');
+  if(pl){
+    pl=false;b.textContent='▶ 재생';clearInterval(ti);sa();
+  } else {
+    pl=true;b.textContent='⏸ 정지';
+    ss(cur);pa(cur);se=0;el=0;
+    // Timer ONLY updates display — never advances scenes
+    ti=setInterval(()=>{
+      if(!pl)return;
+      el++;se++;
+      uT();uP();
+    },1000);
+  }
+}
+
+// ★ tk() REMOVED — no more timer-based scene advancement
+
+function uT(){
+  // Calculate total duration from audio pool
+  let totalEst=0;
+  for(let i=0;i<12;i++){
+    const a=audioPool[i];
+    totalEst+=(a&&a.duration&&isFinite(a.duration))?a.duration+1.5:30;
+  }
+  const m=String(Math.floor(el/60)).padStart(2,'0'),s=String(el%60).padStart(2,'0');
+  const tm=String(Math.floor(totalEst/60)).padStart(2,'0'),ts=String(Math.round(totalEst%60)).padStart(2,'0');
+  document.getElementById('tmr').textContent=`${m}:${s} / ${tm}:${ts}`;
+}
+
+function uP(){
+  // Progress based on current scene position (each scene = equal weight)
+  const pct=((cur+(se>0?0.5:0))/tot)*100;
+  document.getElementById('prg').style.width=pct+'%';
+}
+
+function tm(){mt=!mt;document.getElementById('mb').textContent=mt?'🔊 켜기':'🔇 음소거';if(mt)sa();else if(pl)pa(cur)}
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();nx()}
+  if(e.key==='ArrowLeft'){e.preventDefault();pv()}
+  if(e.key==='p')tp();if(e.key==='m')tm();
+  if(e.key==='f')document.documentElement.requestFullscreen?.();
+});
+
+ss(0);uT();
+</body>
+</html>
