@@ -88,30 +88,91 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#fff;font
 /* Subtitle */
 #sub{position:fixed;bottom:50px;left:50%;transform:translateX(-50%);
 
-/* AI Presenter Avatar */
-#ai-avatar{position:fixed;bottom:50px;right:20px;z-index:102;
-  display:flex;flex-direction:column;align-items:center;pointer-events:none;
-  opacity:0;transition:opacity 0.8s ease;transform-origin:bottom center}
-#ai-avatar.visible{opacity:1}
-.avatar-container{width:120px;height:140px;position:relative}
+/* AI Presenter Avatar — always visible, prominent */
+#ai-avatar{position:fixed;bottom:130px;right:30px;z-index:103;
+  display:flex;flex-direction:column;align-items:center;
+  pointer-events:none;
+  opacity:1;
+  transition:transform 0.4s ease}
+#ai-avatar.speaking{transform:scale(1.05)}
+.avatar-container{width:170px;height:200px;position:relative;
+  filter:drop-shadow(0 10px 28px rgba(0,212,170,0.4))}
 .avatar-body{position:absolute;bottom:0;left:50%;transform:translateX(-50%)}
-.avatar-glow{position:absolute;bottom:-10px;left:50%;transform:translateX(-50%);
-  width:100px;height:20px;background:radial-gradient(ellipse,rgba(0,212,170,.25),transparent);
-  border-radius:50%;filter:blur(8px)}
-.avatar-label{font-family:'Noto Sans KR';font-size:11px;color:var(--p);
-  margin-top:4px;background:rgba(0,0,0,.7);padding:3px 10px;border-radius:20px;
-  border:1px solid rgba(0,212,170,.3);letter-spacing:1px}
+.avatar-body svg{width:170px;height:200px}
+.avatar-glow{position:absolute;bottom:-12px;left:50%;transform:translateX(-50%);
+  width:150px;height:30px;background:radial-gradient(ellipse,rgba(0,212,170,.4),transparent 70%);
+  border-radius:50%;filter:blur(10px);
+  animation:glowPulse 2.5s ease-in-out infinite}
+@keyframes glowPulse{0%,100%{opacity:0.5}50%{opacity:1}}
+
+.avatar-label{font-family:'Noto Sans KR';font-size:13px;color:#00d4aa;
+  margin-top:8px;background:rgba(0,0,0,0.85);padding:5px 14px;border-radius:20px;
+  border:1.5px solid rgba(0,212,170,.5);letter-spacing:1px;font-weight:600;
+  display:flex;align-items:center;gap:6px}
+.status-dot{display:inline-block;width:8px;height:8px;border-radius:50%;
+  background:#888;transition:all 0.3s}
+#ai-avatar.speaking .status-dot{background:#00d4aa;
+  box-shadow:0 0 12px #00d4aa;animation:dotPulse 1s infinite}
+@keyframes dotPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
+
+/* AI Presenter Card — explains the project scene by scene */
+#presenter-card{position:fixed;bottom:140px;right:230px;z-index:102;
+  max-width:580px;min-width:380px;
+  background:linear-gradient(135deg,rgba(7,9,15,0.96),rgba(15,30,45,0.94));
+  backdrop-filter:blur(24px);
+  padding:24px 28px 22px 28px;border-radius:20px;
+  border:1.5px solid rgba(0,212,170,0.4);
+  box-shadow:0 20px 60px rgba(0,0,0,0.5),0 0 40px rgba(0,212,170,0.15);
+  opacity:1;transform:translateX(0);
+  transition:opacity 0.6s ease,transform 0.6s ease}
+
+#presenter-card::after{content:'';position:absolute;
+  right:-14px;bottom:60px;
+  width:0;height:0;border-style:solid;
+  border-width:10px 0 10px 16px;
+  border-color:transparent transparent transparent rgba(15,30,45,0.94)}
+
+.pc-header{display:flex;align-items:center;gap:10px;
+  font-family:'Orbitron';font-size:11px;color:#00d4aa;
+  letter-spacing:2px;margin-bottom:12px;text-transform:uppercase;
+  padding-bottom:10px;border-bottom:1px solid rgba(0,212,170,0.2)}
+.pc-header::before{content:'';width:24px;height:2px;background:#00d4aa}
+.pc-scene-num{margin-left:auto;font-size:10px;color:#888;letter-spacing:1px}
+
+.pc-title{font-family:'Noto Sans KR';font-size:clamp(20px,2vw,26px);
+  font-weight:700;color:#fff;margin-bottom:10px;letter-spacing:-0.5px;line-height:1.3}
+.pc-title .accent{color:#00d4aa}
+
+.pc-explanation{font-family:'Noto Sans KR';font-size:clamp(14px,1.4vw,17px);
+  color:rgba(255,255,255,0.92);line-height:1.7;margin-bottom:14px;
+  font-weight:400;letter-spacing:-0.2px}
+
+.pc-keypoints{display:flex;flex-wrap:wrap;gap:8px}
+.pc-kp{font-size:12px;padding:5px 12px;border-radius:14px;
+  background:rgba(0,212,170,0.12);border:1px solid rgba(0,212,170,0.35);
+  color:#00d4aa;font-weight:500;letter-spacing:0.2px}
+.pc-kp.b{background:rgba(64,180,255,0.12);border-color:rgba(64,180,255,0.35);color:#40b4ff}
+.pc-kp.w{background:rgba(255,180,80,0.12);border-color:rgba(255,180,80,0.35);color:#ffb450}
+
+@media (max-width:1200px){
+  #presenter-card{right:200px;bottom:130px;max-width:500px;min-width:320px;padding:20px 24px}
+  .pc-title{font-size:20px}
+  .pc-explanation{font-size:15px}
+  .avatar-container{width:140px;height:165px}
+}
+@media (max-width:768px){
+  #presenter-card{right:120px;bottom:115px;max-width:55vw;min-width:200px;padding:14px 16px}
+  .pc-title{font-size:14px}
+  .pc-explanation{font-size:11px;line-height:1.5}
+  .pc-kp{font-size:9px;padding:3px 7px}
+  .avatar-container{width:100px;height:120px}
+  #ai-avatar{bottom:100px;right:10px}
+}
+
+/* Subtitle area now redundant — hide it (presenter card replaces it) */
+#sub{display:none !important}
 
 /* Mouth animation when speaking */
-@keyframes talk{
-  0%{ry:2;height:3}
-  15%{ry:5;height:8}
-  30%{ry:3;height:4}
-  45%{ry:6;height:9}
-  60%{ry:2;height:3}
-  75%{ry:5;height:7}
-  100%{ry:2;height:3}
-}
 #mouth-shape{transition:all 0.1s}
 #ai-avatar.speaking #mouth-shape{animation:mouthMove 0.35s ease-in-out infinite alternate}
 @keyframes mouthMove{
@@ -119,14 +180,12 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#fff;font
   50%{ry:5;rx:7}
   100%{ry:3;rx:5}
 }
-/* Subtle breathing animation */
 .avatar-body svg{animation:breathe 3s ease-in-out infinite}
 @keyframes breathe{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
 
-/* Blink animation */
 @keyframes blink{0%,96%,100%{transform:scaleY(1)}98%{transform:scaleY(0.1)}}
-.eye-group{animation:blink 4s ease-in-out infinite}
-.eye-r{animation:blink 4s ease-in-out infinite;animation-delay:0.1s}
+.eye-group{transform-origin:center;animation:blink 4s ease-in-out infinite}
+.eye-r{transform-origin:center;animation:blink 4s ease-in-out infinite;animation-delay:0.1s}
 
   background:rgba(0,0,0,.72);backdrop-filter:blur(20px);
   padding:18px 44px 18px 44px;border-radius:10px;max-width:920px;width:90%;
@@ -234,10 +293,25 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#fff;font
     </div>
     <div class="avatar-glow"></div>
   </div>
-  <div class="avatar-label">AI 아나운서</div>
+  <div class="avatar-label"><span class="status-dot"></span>AI 아나운서</div>
 </div>
 
 <div id="prg" style="width:0%"></div>
+
+<!-- AI Presenter Card -->
+<div id="presenter-card">
+  <div class="pc-header">
+    <span>AI 아나운서 브리핑</span>
+    <span class="pc-scene-num" id="pc-scene-num">01 / 12</span>
+  </div>
+  <div class="pc-title" id="pc-title"><span class="accent">아산시</span> 강소형 스마트시티</div>
+  <div class="pc-explanation" id="pc-explanation">안녕하세요. 저는 아산시 강소형 스마트시티 조성사업을 안내해드릴 AI 아나운서입니다. ▶ 재생 버튼을 눌러주시면 12개 주제를 차례대로 자세히 설명해 드리겠습니다.</div>
+  <div class="pc-keypoints" id="pc-keypoints">
+    <span class="pc-kp">총사업비 240억원</span>
+    <span class="pc-kp b">2개 혁신거점</span>
+    <span class="pc-kp w">17개 단위사업</span>
+  </div>
+</div>
 <div id="cz">
   <span class="hu" id="tmr">00:00 / 05:48</span>
   <button onclick="pv()">◀ 이전</button>
@@ -262,6 +336,47 @@ const NF=[
 "이 모든 변화는, 결국 시민 여러분의 일상을 위한 것입니다. 전자시민증 하나로 편리하게 생활하고, AI와 순찰로봇이 24시간 우리 동네를 안전하게 지켜줍니다. 앱 하나로 부르는 스마트 버스, 온천 옆 스마트하우스에서 즐기는 워케이션, 그리고 내 아이디어가 실제 정책이 되는 도시. 이것이 아산 스마트시티가 그리는 시민의 내일입니다.",
 "스마트한 내일, 아산에서 시작합니다. 감사합니다."
 ];
+
+// ====== AI PRESENTER EXPLANATIONS ======
+const EXPLAINS=[
+  {title:"<span class='accent'>아산시</span> 강소형 스마트시티",
+   explain:"안녕하세요. 저는 아산시 강소형 스마트시티 조성사업을 안내해드릴 AI 아나운서입니다. 이 사업은 국토교통부 공모로 선정된 240억원 규모의 대규모 프로젝트로, 디지털 OASIS를 통해 지역경제를 활성화하고 데이터 기반 스마트시티를 만드는 것이 목표입니다.",
+   points:[["240억원 사업","g"],["국토부 공모 선정","b"],["2023~2026","w"]]},
+  {title:"왜 <span class='accent'>스마트시티</span>인가?",
+   explain:"아산시는 세 가지 도시 과제를 안고 있습니다. 첫째, 도고 일대 서남생활권 인구가 10년간 20%나 감소했습니다. 둘째, 동쪽 배방 신도시와 서쪽 도고 사이의 발전 격차가 점점 커지고 있습니다. 이런 지역소멸 위기를 극복하기 위해 스마트 기술이 필요합니다.",
+   points:[["인구 20% 감소","w"],["서남생활권 위기","w"],["동서 불균형","w"]]},
+  {title:"<span class='accent'>디지털 OASIS</span> 전략",
+   explain:"아산시는 두 곳에 혁신 거점을 만듭니다. 서쪽 도고에는 디지털 오아시스 존을, 동쪽 배방에는 이노베이션 존을 조성합니다. OASIS는 Office, Activity, Study, Innovation, Spot의 머리글자로, 일과 휴식, 학습이 모두 가능한 공간이라는 뜻입니다.",
+   points:[["Office","g"],["Activity","g"],["Study","b"],["Innovation","b"],["Spot","w"]]},
+  {title:"도고 <span class='accent'>스마트하우스</span> 30호",
+   explain:"도고 디지털 오아시스 존을 소개합니다. 파라다이스 스파 도고 인근에 풀빌라형 이동식 스마트하우스 30호가 들어섭니다. 온천과 자연 속에서 일과 휴식을 함께 즐기는 새로운 워케이션 공간입니다. AI CCTV와 스마트폴, 순찰로봇이 24시간 안전을 지키고, 무인매장과 고속 와이파이도 갖추었습니다.",
+   points:[["스마트하우스 30호","g"],["AI CCTV 15대","b"],["순찰로봇","b"],["24시간 무인매장","w"]]},
+  {title:"아산 <span class='accent'>이노베이션 스퀘어</span>",
+   explain:"배방 이노베이션 존의 중심은 아산 이노베이션 스퀘어입니다. KTX 천안아산역에서 도보 10분 거리, 호서대학교 온라인교육관에 자리잡고 있습니다. 지하 1층은 LED 월과 홍보관, 회의실, 서버실. 지하 2층은 공유오피스, 오픈스튜디오, 크로마키 촬영 공간으로 창업기업을 지원합니다.",
+   points:[["KTX 도보 10분","g"],["B1 홍보관·LED Wall","b"],["B2 공유오피스","b"],["스튜디오","w"]]},
+  {title:"하나로 연결되는 <span class='accent'>스마트 서비스</span>",
+   explain:"두 거점을 하나로 연결하는 스마트 서비스를 소개합니다. 모바일 전자시민증으로 신분 확인, 할인, 시설 예약을 한 번에. 디지털 노마드를 위한 워케이션 플랫폼이 운영되고, AI 시설 관제가 도시 전체를 실시간 모니터링합니다. 정보관리 서비스로 데이터를 수집·분석합니다.",
+   points:[["전자시민증","g"],["워케이션 플랫폼","b"],["AI 시설관제","b"],["정보관리","w"]]},
+  {title:"<span class='accent'>DRT</span> 부르면 오는 버스",
+   explain:"새로운 교통 서비스 DRT가 도입됩니다. DRT는 정해진 노선 없이 앱으로 부르면 원하는 시간과 장소로 데려다주는 수요응답형 교통수단입니다. 지역 민간운수사와 아산시 마중버스를 연계하여, KTX역에서 이노베이션 스퀘어를 거쳐 오아시스 스팟과 도고온천까지 동서를 잇습니다.",
+   points:[["수요응답형 교통","g"],["앱 호출","b"],["동서 연결","w"]]},
+  {title:"<span class='accent'>5개 기관</span> 협력 생태계",
+   explain:"이 사업은 다섯 개 기관이 힘을 합쳐 추진합니다. 아산시가 사업 전체를 총괄하고, 제일엔지니어링이 사업 관리와 기술 자문을 담당합니다. 호서대학교는 이노베이션 스퀘어 운영과 리빙랩을, 충남연구원은 거버넌스와 정책 연구를, 카이스트는 첨단 기술 연구와 자문을 맡고 있습니다.",
+   points:[["아산시","g"],["제일엔지니어링","g"],["호서대","b"],["충남연구원","b"],["KAIST","w"]]},
+  {title:"시민이 만드는 <span class='accent'>리빙랩</span>",
+   explain:"리빙랩은 시민이 직접 참여해 우리 동네 문제를 함께 찾고 해결하는 프로그램입니다. 지금 다섯 개 팀이 활동 중입니다. 다문화 가정 연결, 골목길 도시재생, 청년 정착 지원, 마을 이야기 디지털 기록, 그리고 숨은 골목 관광 코스 발굴까지. 시민 아이디어가 실제 정책으로 이어집니다.",
+   points:[["5개 리빙랩 팀","g"],["시민 참여","b"],["정책 반영","w"]]},
+  {title:"<span class='accent'>숫자</span>로 보는 아산 스마트시티",
+   explain:"아산 스마트시티를 숫자로 정리하면 이렇습니다. 총 사업비 240억 원, 17개 단위사업, AI 환경조성, 5개 참여기관, 그리고 5개 리빙랩 팀이 함께합니다. 2023년 12월 시작된 이 사업은 2026년 12월 완료를 목표로 힘차게 나아가고 있습니다.",
+   points:[["240억원","g"],["17개 단위사업","b"],["AI 환경조성","b"],["5개 기관","w"]]},
+  {title:"<span class='accent'>시민 일상</span>이 바뀝니다",
+   explain:"이 모든 변화는 시민 여러분의 일상을 위한 것입니다. 전자시민증 하나로 편리한 생활, AI와 순찰로봇이 24시간 지키는 안전한 동네, 앱으로 부르는 스마트 버스, 온천 옆 스마트하우스에서 즐기는 워케이션, 그리고 내 아이디어가 정책이 되는 도시. 이것이 아산 스마트시티가 그리는 시민의 내일입니다.",
+   points:[["편리함","g"],["안전","b"],["워케이션","b"],["시민 참여","w"]]},
+  {title:"스마트한 내일, <span class='accent'>아산</span>",
+   explain:"지금까지 아산시 강소형 스마트시티 조성사업을 안내해 드렸습니다. 스마트한 내일, 아산에서 시작합니다. 시청해 주셔서 감사합니다.",
+   points:[["감사합니다","g"]]}
+];
+
 
 // ====== AUDIO-DRIVEN SCENE ENGINE ======
 // Scenes advance ONLY when audio finishes playing.
@@ -290,7 +405,7 @@ function pa(i){
   if(!a)return;
   a.currentTime=0;
   curA=a;
-  a.onplay=()=>{document.getElementById('si').className='spk on';const av=document.getElementById('ai-avatar');av.classList.add('visible','speaking')};
+  a.onplay=()=>{document.getElementById('si').className='spk on';const av=document.getElementById('ai-avatar');av.classList.add('visible','speaking');document.getElementById('ai-avatar').classList.add('visible')};
   a.onended=()=>{
     document.getElementById('si').className='spk';document.getElementById('ai-avatar').classList.remove('speaking');
     // ★ THIS is the ONLY place that advances scenes
@@ -305,7 +420,7 @@ function pa(i){
       } else {
         // Last scene finished — stop playback
         pl=false;
-        document.getElementById('pbtn').textContent='▶ 처음부터';document.getElementById('ai-avatar').classList.remove('visible');
+        document.getElementById('pbtn').textContent='▶ 처음부터';/* avatar stays visible */
         clearInterval(ti);
         sa();
         cur=0;el=0;se=0;
@@ -338,6 +453,23 @@ function ss(i){
   }
   document.getElementById('scn').textContent=String(i+1).padStart(2,'0')+' / 12';
   document.getElementById('stxt').textContent=NF[i];
+  // Populate AI presenter card with scene-specific explanation
+  const ex=EXPLAINS[i];
+  if(ex){
+    const _t=document.getElementById('pc-title');if(_t)_t.innerHTML=ex.title;
+    const _e=document.getElementById('pc-explanation');if(_e)_e.textContent=ex.explain;
+    const _n=document.getElementById('pc-scene-num');if(_n)_n.textContent=String(i+1).padStart(2,'0')+' / 12';
+    const _kp=document.getElementById('pc-keypoints');
+    if(_kp){
+      _kp.innerHTML='';
+      ex.points.forEach(p=>{
+        const sp=document.createElement('span');
+        sp.className='pc-kp '+p[1];
+        sp.textContent=p[0];
+        _kp.appendChild(sp);
+      });
+    }
+  }
   if(s)s.querySelectorAll('.stat-n[data-t]').forEach((n,j)=>{
     setTimeout(()=>{const t=parseInt(n.dataset.t);aN(n,0,t,1400)},600+j*180);
   });
@@ -351,7 +483,7 @@ function pv(){if(cur>0){cur--;se=0;sa();ss(cur);if(pl)pa(cur);uP()}}
 function tp(){
   const b=document.getElementById('pbtn');
   if(pl){
-    pl=false;b.textContent='▶ 재생';clearInterval(ti);sa();document.getElementById('ai-avatar').classList.remove('visible');
+    pl=false;b.textContent='▶ 재생';clearInterval(ti);sa();/* avatar stays visible */
   } else {
     pl=true;b.textContent='⏸ 정지';
     ss(cur);pa(cur);se=0;el=0;
