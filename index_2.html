@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>아산시 강소형 스마트시티 조성사업 — 디지털 OASIS</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap');
+
+/* ---- Palette: cool tech (배방 이노베이션) + warm oasis (도고 온천) ---- */
+:root{
+  --p:#00d4aa;      /* teal primary */
+  --a:#00b4ff;      /* electric blue — 배방/cool */
+  --warm:#ffb45e;   /* amber — 도고 온천/warm */
+  --d:#07090f;--l:#e6edf3;--m:#8b949e;
+  --xfade:900ms;    /* scene crossfade */
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#fff;font-family:'Noto Sans KR',sans-serif}
+#cinema{width:100%;height:100%;position:relative;overflow:hidden}
+
+/* ---- Scene layers: cinematic crossfade + gentle push ---- */
+.sc{position:absolute;inset:0;opacity:0;z-index:1;overflow:hidden;
+  transform:scale(1.015);
+  transition:opacity var(--xfade) cubic-bezier(.4,0,.2,1),transform var(--xfade) cubic-bezier(.4,0,.2,1)}
+.sc.on{opacity:1;z-index:10;transform:scale(1)}
+.sc .bg{position:absolute;inset:-60px;background-size:cover;background-position:center;
+  filter:brightness(.42) saturate(1.15);will-change:transform}
+.sc.on .bg{animation:kb 34s ease-out forwards}
+@keyframes kb{0%{transform:scale(1.02)}100%{transform:scale(1.14) translate(-18px,-12px)}}
+.sc .ov{position:absolute;inset:0;z-index:2;
+  background:linear-gradient(180deg,rgba(0,0,0,.22) 0%,rgba(0,0,0,.06) 32%,rgba(0,0,0,.42) 62%,rgba(0,0,0,.84) 100%)}
+.sc[data-zone="warm"] .ov{background:linear-gradient(180deg,rgba(40,20,0,.28) 0%,rgba(20,10,0,.06) 32%,rgba(0,0,0,.44) 62%,rgba(0,0,0,.85) 100%)}
+.sc .ct{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;justify-content:center;align-items:center;
+  padding:60px 80px 168px}
+
+/* ---- In-scene text (staggered reveal, tied to scene .on) ---- */
+.sl{font-family:'Rajdhani';font-size:clamp(11px,1.2vw,15px);letter-spacing:6px;text-transform:uppercase;
+  color:var(--p);font-weight:600;margin-bottom:14px;text-align:center;
+  opacity:0;transform:translateY(14px);transition:all .55s .15s}
+.sc.on .sl{opacity:1;transform:translateY(0)}
+.st{font-size:clamp(30px,4.8vw,66px);font-weight:900;text-align:center;line-height:1.14;
+  text-shadow:0 4px 40px rgba(0,0,0,.7);
+  opacity:0;transform:translateY(20px);transition:all .65s .28s}
+.sc.on .st{opacity:1;transform:translateY(0)}
+.st .h{background:linear-gradient(135deg,var(--p),var(--a));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.st .hw{background:linear-gradient(135deg,var(--warm),#ff8a5b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.sd{font-size:clamp(14px,1.5vw,20px);font-weight:300;text-align:center;max-width:860px;line-height:1.75;
+  margin-top:18px;color:rgba(255,255,255,.86);text-shadow:0 2px 20px rgba(0,0,0,.5);
+  opacity:0;transform:translateY(14px);transition:all .55s .5s}
+.sc.on .sd{opacity:1;transform:translateY(0)}
+.pills{display:flex;gap:11px;flex-wrap:wrap;justify-content:center;margin-top:24px;
+  opacity:0;transform:translateY(10px);transition:all .55s .68s}
+.sc.on .pills{opacity:1;transform:translateY(0)}
+.pill{font-size:clamp(12px,1.05vw,15px);padding:8px 20px;border-radius:50px;font-weight:500;
+  backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.15)}
+.pill.g{background:rgba(0,212,170,.16);color:var(--p);border-color:rgba(0,212,170,.32)}
+.pill.b{background:rgba(0,180,255,.16);color:var(--a);border-color:rgba(0,180,255,.32)}
+.pill.o{background:rgba(255,180,94,.15);color:var(--warm);border-color:rgba(255,180,94,.34)}
+.pill.w{background:rgba(255,255,255,.08);color:rgba(255,255,255,.9)}
+
+/* ---- Stats (scene 9) ---- */
+.sr2{display:flex;gap:clamp(24px,4vw,56px);margin-top:34px;flex-wrap:wrap;justify-content:center;
+  opacity:0;transition:all .55s .55s}
+.sc.on .sr2{opacity:1}
+.stat{text-align:center}
+.stat-n{font-family:'Orbitron';font-size:clamp(32px,4.5vw,58px);font-weight:900;
+  background:linear-gradient(135deg,var(--p),var(--a));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stat-u{font-family:'Orbitron';font-size:clamp(12px,1.2vw,18px);color:var(--p)}
+.stat-l{font-size:clamp(12px,1.1vw,16px);color:rgba(255,255,255,.55);margin-top:4px}
+
+/* ---- Route (scene 6) ---- */
+.route{display:flex;align-items:flex-start;flex-wrap:wrap;justify-content:center;gap:0;margin-top:36px;
+  opacity:0;transition:all .55s .55s}
+.sc.on .route{opacity:1}
+.rs{text-align:center;min-width:clamp(100px,12vw,160px)}
+.rs .ri{font-size:clamp(28px,3vw,42px);margin-bottom:6px}
+.rs h4{font-size:clamp(13px,1.2vw,17px);font-weight:700}
+.rs p{font-size:clamp(10px,.9vw,14px);color:rgba(255,255,255,.5)}
+.ra{font-size:clamp(20px,2.5vw,32px);color:var(--p);margin:0 clamp(4px,1vw,12px);align-self:center;opacity:.5;animation:ap 1.5s infinite}
+@keyframes ap{0%,100%{opacity:.3}50%{opacity:.85}}
+
+/* ---- Timeline (scene 9) ---- */
+.tl{display:flex;align-items:flex-start;flex-wrap:wrap;justify-content:center;gap:0;margin-top:34px;
+  opacity:0;transition:all .55s .78s}
+.sc.on .tl{opacity:1}
+.td{display:flex;flex-direction:column;align-items:center;min-width:70px}
+.tc{width:14px;height:14px;border-radius:50%;background:var(--p);box-shadow:0 0 12px var(--p)}
+.ty{font-family:'Orbitron';font-size:12px;color:var(--p);margin-top:8px;font-weight:600}
+.tx{font-size:11px;color:rgba(255,255,255,.45);margin-top:2px}
+.tll{width:clamp(36px,6vw,78px);height:2px;background:linear-gradient(90deg,var(--p),rgba(0,212,170,.2));margin-top:6px}
+
+/* ---- Consortium (scene 7): tiered subsidy structure ---- */
+.gov{display:flex;flex-direction:column;align-items:center;margin-top:26px;
+  opacity:0;transform:translateY(10px);transition:all .55s .5s}
+.sc.on .gov{opacity:1;transform:translateY(0)}
+.gov-lead{background:linear-gradient(135deg,rgba(0,212,170,.22),rgba(0,180,255,.16));
+  border:1.5px solid rgba(0,212,170,.5);border-radius:14px;padding:14px 34px;text-align:center;min-width:260px}
+.gov-lead .role{font-family:'Rajdhani';font-size:11px;letter-spacing:3px;color:var(--p);font-weight:600}
+.gov-lead h4{font-size:clamp(17px,1.8vw,23px);font-weight:900;margin-top:2px}
+.gov-lead p{font-size:clamp(11px,1vw,14px);color:rgba(255,255,255,.6);margin-top:3px}
+.gov-conn{width:2px;height:22px;background:linear-gradient(180deg,var(--p),rgba(255,255,255,.15))}
+.gov-tier{font-family:'Rajdhani';font-size:11px;letter-spacing:2px;color:var(--m);margin:2px 0 12px;text-transform:uppercase}
+.cg{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+.cc{background:rgba(255,255,255,.05);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.1);
+  border-radius:14px;padding:16px 22px;text-align:center;min-width:clamp(126px,13vw,168px)}
+.cc.direct{border-color:rgba(0,180,255,.45);background:rgba(0,180,255,.09)}
+.cc h4{font-size:clamp(13px,1.2vw,16px);font-weight:700;margin-bottom:3px}
+.cc .cr{font-size:clamp(9px,.8vw,11px);color:var(--p);font-weight:600}
+.cc.direct .cr{color:var(--a)}
+.cc p{font-size:clamp(10px,.85vw,13px);color:rgba(255,255,255,.5);margin-top:5px;line-height:1.4}
+
+/* ---- Chapter chip (top-left) ---- */
+#chip{position:fixed;top:26px;left:30px;z-index:70;display:flex;align-items:center;gap:12px;
+  background:rgba(7,9,15,.62);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.1);
+  border-radius:50px;padding:9px 20px 9px 14px;
+  opacity:0;transform:translateY(-8px);transition:opacity .5s,transform .5s}
+#chip.show{opacity:1;transform:translateY(0)}
+#chip .idx{font-family:'Orbitron';font-size:12px;font-weight:700;color:var(--p);
+  background:rgba(0,212,170,.14);border:1px solid rgba(0,212,170,.3);border-radius:50px;padding:3px 10px}
+#chip .ctitle{font-size:13px;font-weight:600;letter-spacing:.3px}
+#chip .zone{font-family:'Rajdhani';font-size:10px;letter-spacing:2px;text-transform:uppercase;
+  padding:2px 9px;border-radius:50px;font-weight:600}
+#chip .zone.warm{color:var(--warm);background:rgba(255,180,94,.14);border:1px solid rgba(255,180,94,.3)}
+#chip .zone.cool{color:var(--a);background:rgba(0,180,255,.14);border:1px solid rgba(0,180,255,.3)}
+#chip .zone.dual{color:var(--p);background:rgba(0,212,170,.14);border:1px solid rgba(0,212,170,.3)}
+#chip .zone.core{color:var(--m);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14)}
+
+/* ---- Narration caption (lower third) — text == what you hear ---- */
+#cap{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);z-index:60;
+  max-width:min(1060px,90vw);text-align:center;
+  opacity:0;transition:opacity .38s ease}
+#cap.show{opacity:1}
+#cap .inner{display:inline-block;background:linear-gradient(180deg,rgba(7,9,15,.4),rgba(7,9,15,.72));
+  backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.08);border-radius:14px;
+  padding:14px 30px;font-size:clamp(14px,1.45vw,19px);line-height:1.62;color:rgba(255,255,255,.94);
+  box-shadow:0 12px 40px rgba(0,0,0,.4)}
+#cap .inner::before{content:'';display:inline-block;width:7px;height:7px;border-radius:50%;
+  background:var(--p);margin-right:10px;vertical-align:middle;box-shadow:0 0 8px var(--p)}
+#ai-avatar.speaking ~ #cap .inner::before{animation:capdot 1s infinite}
+@keyframes capdot{0%,100%{opacity:.4}50%{opacity:1}}
+
+/* ---- AI presenter avatar (narrator persona) ---- */
+#ai-avatar{position:fixed;bottom:126px;right:30px;z-index:65;
+  display:flex;flex-direction:column;align-items:center;pointer-events:none;
+  opacity:0;transform:translateY(12px);transition:opacity .5s,transform .5s}
+#ai-avatar.visible{opacity:1;transform:translateY(0)}
+#ai-avatar.speaking{transform:scale(1.04)}
+.avatar-container{width:126px;height:150px;position:relative;filter:drop-shadow(0 10px 26px rgba(0,212,170,.4))}
+.avatar-body svg{width:126px;height:150px;animation:breathe 3.4s ease-in-out infinite}
+@keyframes breathe{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
+.avatar-glow{position:absolute;bottom:-10px;left:50%;transform:translateX(-50%);
+  width:120px;height:26px;background:radial-gradient(ellipse,rgba(0,212,170,.4),transparent 70%);
+  border-radius:50%;filter:blur(9px);animation:glowPulse 2.6s ease-in-out infinite}
+@keyframes glowPulse{0%,100%{opacity:.5}50%{opacity:1}}
+.avatar-label{font-size:12px;color:var(--p);margin-top:8px;background:rgba(0,0,0,.85);
+  padding:5px 13px;border-radius:20px;border:1.5px solid rgba(0,212,170,.5);
+  letter-spacing:1px;font-weight:600;display:flex;align-items:center;gap:6px}
+.status-dot{width:8px;height:8px;border-radius:50%;background:#888;transition:all .3s}
+#ai-avatar.speaking .status-dot{background:var(--p);box-shadow:0 0 12px var(--p);animation:dotPulse 1s infinite}
+@keyframes dotPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.35)}}
+#mouth-shape{transition:all .1s}
+#ai-avatar.speaking #mouth-shape{animation:mouthMove .32s ease-in-out infinite alternate}
+@keyframes mouthMove{0%{ry:2;rx:6}50%{ry:5;rx:7}100%{ry:3;rx:5}}
+.eye-group,.eye-r{transform-origin:center;animation:blink 4s ease-in-out infinite}
+.eye-r{animation-delay:.1s}
+@keyframes blink{0%,96%,100%{transform:scaleY(1)}98%{transform:scaleY(.1)}}
+
+/* ---- Progress bar (continuous, audio-driven) ---- */
+#prg{position:fixed;bottom:48px;left:0;height:3px;width:0;
+  background:linear-gradient(90deg,var(--p),var(--a));z-index:75;
+  box-shadow:0 0 10px var(--p);transition:width .18s linear}
+
+/* ---- Controls ---- */
+#cz{position:fixed;bottom:0;left:0;right:0;height:48px;background:rgba(0,0,0,.92);
+  backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center;gap:10px;
+  z-index:80;border-top:1px solid rgba(255,255,255,.06)}
+#cz button{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:#fff;
+  padding:6px 18px;border-radius:6px;font-size:12px;cursor:pointer;font-family:'Noto Sans KR';transition:all .2s}
+#cz button:hover{background:rgba(0,212,170,.15);border-color:var(--p);color:var(--p)}
+#cz button:focus-visible{outline:2px solid var(--p);outline-offset:2px}
+#cz .py{background:linear-gradient(135deg,var(--p),var(--a));border:none;color:#000;font-weight:700;padding:6px 26px}
+#cz .py:hover{transform:scale(1.03);box-shadow:0 0 16px rgba(0,212,170,.3)}
+.hu{font-family:'Orbitron';font-size:10px;color:rgba(255,255,255,.4);letter-spacing:2px;margin:0 14px}
+
+/* ---- Start overlay ---- */
+#start{position:fixed;inset:0;z-index:200;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:22px;background:rgba(4,6,11,.78);backdrop-filter:blur(6px);
+  transition:opacity .6s}
+#start.hide{opacity:0;pointer-events:none}
+#start .sload{font-family:'Rajdhani';font-size:13px;letter-spacing:4px;color:var(--m);text-transform:uppercase}
+#start h2{font-size:clamp(22px,3vw,38px);font-weight:900;text-align:center;line-height:1.2}
+#start h2 .h{background:linear-gradient(135deg,var(--p),var(--a));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+#start .go{background:linear-gradient(135deg,var(--p),var(--a));border:none;color:#000;font-weight:700;
+  font-size:16px;padding:14px 44px;border-radius:50px;cursor:pointer;font-family:'Noto Sans KR';
+  box-shadow:0 8px 30px rgba(0,212,170,.35);transition:transform .2s}
+#start .go:hover{transform:scale(1.05)}
+#start .go:disabled{opacity:.5;cursor:wait}
+
+@media(max-width:1100px){.sc .ct{padding:48px 30px 150px}#ai-avatar{bottom:110px;right:14px}
+  .avatar-container{width:104px;height:124px}.avatar-body svg{width:104px;height:124px}}
+@media(max-width:768px){.sc .ct{padding:40px 20px 150px}#chip{top:14px;left:14px;padding:7px 14px 7px 10px}
+  #chip .ctitle{display:none}#cap{bottom:78px}#cap .inner{padding:11px 18px;font-size:13px}
+  #ai-avatar{bottom:96px;right:8px}.avatar-container{width:80px;height:96px}.avatar-body svg{width:80px;height:96px}
+  .avatar-label{font-size:10px;padding:3px 9px}}
+@media(prefers-reduced-motion:reduce){
+  .sc,.sc.on{transition:opacity .4s ease;transform:none!important}
+  .sc.on .bg{animation:none}
+  .sl,.st,.sd,.pills,.sr2,.route,.tl,.gov{transition:opacity .4s ease!important;transform:none!important}
+}
+</style>
+</head>
+<body>
+<div id="cinema">
+
+  <!-- 0 · Opening -->
+  <div class="sc on" data-s="0" data-zone="core"><div class="bg" style="background-image:url('https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=1920&q=80')"></div><div class="ov"></div><div class="ct">
+    <div class="sl">국토교통부 · 충청남도 · 아산시 | 강소형 스마트시티 조성사업</div>
+    <h1 class="st"><span class="h">아산시</span> 강소형<br>스마트시티</h1>
+    <p class="sd">디지털 OASIS 구현을 통한 지역경제 활성화와<br>데이터 기반 스마트시티 조성</p>
+    <div class="pills"><span class="pill g">국가보조사업 · 총사업비 240억원</span><span class="pill b">2개 혁신거점</span><span class="pill w">1개 시행기관 + 4개 컨소시엄</span><span class="pill o">2023.12 ~ 2026.12</span></div>
+  </div></div>
+
+  <!-- 1 · Challenge -->
+  <div class="sc" data-s="1" data-zone="core"><div class="bg" style="background-image:url('https://images.unsplash.com/photo-1518156677180-95a2893f3e9f?w=1920&q=80')"></div><div class="ov"></div><div class="ct">
+    <div class="sl">Challenge · 왜 스마트시티인가</div>
+    <h1 class="st">아산시가<br><span class="h">마주한 과제</span></h1>
+    <p class="sd">서남생활권 인구 10년간 20% 감소, 동서 발전 격차 심화<br>관계인구 유입을 통한 지역소멸 극복이 절실합니다</p>
+    <div class="pills"><span class="pill w">📉 서남생활권 인구 20% 감소</span><span class="pill w">⚖️ 동(배방)–서(도고) 불균형</span><span class="pill w">📡 디지털 전환 필요</span></div>
+  </div></div>
+
+  <!-- 2 · Dual-zone strategy -->
+  <div class="sc" data-s="2" data-zone="dual"><div class="bg" style="background-image:url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1920&q=80')"></div><div class="ov"></div><div class="ct">
+    <div class="sl">Digital OASIS — Office · Activity · Study · Innovation · Spot</div>
+    <h1 class="st">도고와 배방을 잇는<br><span class="h">스마트 회랑</span></h1>
+    <p class="sd">일하고, 쉬고, 배우는 모든 것이 가능한 워케이션 거점과<br>데이터 기반 스마트 서비스·창업 생태계를 함께 조성</p>
+    <div class="pills"><span class="pill o">🌴 디지털 OASIS Zone · 도고</span><span class="pill b">🚀 이노베이션 Zone · 배방</span></div>
+  </div></div>
+
+  <!-- 3 · Dogo OASIS Zone (warm) -->
+  <div class="sc" data-s="3" data-zone="warm"><div class="bg" style="background-image:url('https://images.unsplash.com/photo-1540555700478-4be289fbec6d?w=1920&q=80')"></div><div class="ov"></div><div class="ct">
+    <div class="sl">디지털 OASIS Zone · 도고면 기곡리</div>
+    <h1 class="st">온천마을의<br><span class="hw">디지털 변신</span></h1>
+    <p class="sd">파라다이스 스파 도고 인근 부지에 이동식 체류형 스마트하우스 배치<br>온천과 자연 속 워케이션, AI CCTV·순찰로봇이 안전을 지킵니다</p>
+    <div class="pills"><span class="pill o">🏠 스마트하우스 30호</span><span class="pill o">💻 워케이션</span><span class="pill b">📹 AI CCTV 15대</span><span class="pill b">🤖 순찰로봇</span><span class="pill w">🏪 24시간 무인매장</span></div>
+  </div></div>
+
+  <!-- 4 · Innovation Square (cool) -->
+  <div class="sc" data-s="4" data-zone="cool"><div class="bg" style="background-image:url('https://images.unsplash.com/photo-1497366216548-37526070297c?w=1920&q=80')"></div><div class="ov"></div><div class="ct">
+    <div class="sl">이노베이션 Zone · KTX 천안아산역 도보 10분</div>
+    <h1 class="st">아산 이노베이션<br><span class="h">스퀘어</span></h1>
+    <p class="sd">B1 홍보관 · LED Wall · 회의실 · 서버실 &nbsp;|&nbsp; B2 공유오피스 · 오픈스튜디오 · 크로마키<br>창업기업 유치와 비즈니스 인큐베이팅의 혁신 거점 (호서대 온라인교육관)</p>
+    <div class="pills"><span class="pill b">🎬 LED Wall · 홍보관</span><span class="pill b">🖥️ 공유오피스</span><span class="pill g">📹 오픈스튜디오</span><span class="pill g">💡 비즈니스 인큐베이팅</span></div>
+  </div></div>
+
+  <!-- 5 · Integrated platform (cool) -->
+  <div class="sc" data-s="5" data-zone="cool"><div class="bg" style="background-image:url('https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1920&q=80')"></div><div class="ov"></div><div class="ct">
+    <div class="sl">Smart Platform · 도시를 연결하는 데이터</div>
+    <h1 class="st">도시를 연결하는<br><span class="h">통합 서비스</span></h1>
+    <p class="sd">모바일 전자시민증, 워케이션 운영 플랫폼, AI 시설관제<br>디지털 OASIS 정보관리 서비스가 도시 데이터를 수집·분석합니다</p>
+    <div class="pills"><span class="pill g">📱 모바일 전자시민증</span><span class="pill b">💻 워케이션 플랫폼</span><span class="pill g">🛡️ AI 시설관제</span><span class="pill b">📊 정보관리 서비스</span></div>
+  </div></div>
+
+  <!-- 6 · DRT mobility (dual) -->
+  <div class="sc" data-s="6" data-zone="dual"><div class="bg" style="background-image:url('https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=1920&q=80')"></div><div class="ov"></div><div class="ct">
+    <div class="sl">Smart Mobility · 동서를 잇는 수요응답형 교통</div>
+    <h1 class="st">부르면 오는 버스<br><span class="h">DRT 모빌리티</span></h1>
+    <div class="route">
+      <div class="rs"><div class="ri">🚄</div><h4>KTX 천안아산역</h4><p>수도권 접근 거점</p></div>
+      <div class="ra">→</div>
+      <div class="rs"><div class="ri">🏢</div><h4>이노베이션 스퀘어</h4><p>배방 · 호서대</p></div>
+      <div class="ra">→</div>
+      <div class="rs"><div class="ri">🏠</div><h4>OASIS SPOT</h4><p>도고 스마트하우스</p></div>
+      <div class="ra">→</div>
+      <div class="rs"><div class="ri">♨️</div><h4>도고온천</h4><p>힐링 · 관광</p></div>
+    </div>
+  </div></div>
+
+  <!-- 7 · Consortium / subsidy structure -->
+  <div class="sc" data-s="7" data-zone="core"><div class="bg" style="background-image:url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1920&q=80')"></div><div class="ov"></div><div class="ct">
+    <div class="sl">추진체계 · 1개 시행기관 + 4개 컨소시엄사</div>
+    <h1 class="st">민·관·학·연<br><span class="h">보조사업 협력체계</span></h1>
+    <div class="gov">
+      <div class="gov-lead"><div class="role">시행기관</div><h4>아산시</h4><p>사업 총괄 · 예산 집행 · 행정 지원</p></div>
+      <div class="gov-conn"></div>
+      <div class="gov-tier">↓ 직접보조사업자 (수행기관 · PMO)</div>
+      <div class="cg" style="margin-bottom:16px">
+        <div class="cc direct"><h4>제일엔지니어링</h4><div class="cr">직접보조 · PMO</div><p>사업관리 · 기술자문 · 조달총괄</p></div>
+      </div>
+      <div class="gov-tier">↓ 간접보조사업자</div>
+      <div class="cg">
+        <div class="cc"><h4>호서대학교</h4><div class="cr">간접보조</div><p>이노베이션 스퀘어 운영 · 리빙랩</p></div>
+        <div class="cc"><h4>충남연구원</h4><div class="cr">간접보조</div><p>거버넌스 구축 · 정책연구</p></div>
+        <div class="cc"><h4>KAIST</h4><div class="cr">간접보조</div><p>첨단기술 연구 · AI 자문</p></div>
+      </div>
+    </div>
+  </div></div>
+
+  <!-- 8 · Living lab -->
+  <div class="sc" data-s="8" data-zone="core"><div class="bg" style="background-image:url('https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1920&q=80')"></div><div class="ov"></div><div class="ct">
+    <div class="sl">Living Lab · 시민 참여 문제해결</div>
+    <h1 class="st">시민이 <span class="h">직접 만드는</span><br>스마트시티</h1>
+    <p class="sd">시민·기업·대학·행정이 함께 생활 속 문제를 발굴하고 해결하며<br>시민의 아이디어가 실제 정책으로 이어집니다</p>
+    <div class="pills"><span class="pill g">🌱 서로의멘토 · 다문화</span><span class="pill b">🏘️ 다인연클럽 · 도시재생</span><span class="pill g">👩‍💻 엔드롭 · 청년정착</span><span class="pill b">📸 마실기록소 · 아카이빙</span><span class="pill o">🌸 온화미로 · 골목투어</span></div>
+  </div></div>
+
+  <!-- 9 · By the numbers -->
+  <div class="sc" data-s="9" data-zone="core"><div class="bg" style="background-image:url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1920&q=80')"></div><div class="ov"></div><div class="ct">
+    <div class="sl">Impact · 숫자로 보는 사업</div>
+    <h1 class="st">숫자로 보는<br><span class="h">아산 스마트시티</span></h1>
+    <div class="sr2" id="statRow">
+      <div class="stat"><div class="stat-n" data-k="budget">0</div><div class="stat-u">억원</div><div class="stat-l">총 사업비</div></div>
+      <div class="stat"><div class="stat-n" data-k="units">0</div><div class="stat-u">개</div><div class="stat-l">단위사업</div></div>
+      <div class="stat"><div class="stat-n" data-k="cctv">0</div><div class="stat-u">대</div><div class="stat-l">AI CCTV</div></div>
+      <div class="stat"><div class="stat-n" data-k="orgs">0</div><div class="stat-u">개</div><div class="stat-l">참여기관</div></div>
+      <div class="stat"><div class="stat-n" data-k="labs">0</div><div class="stat-u">팀</div><div class="stat-l">리빙랩</div></div>
+    </div>
+    <div class="tl">
+      <div class="td"><div class="tc"></div><div class="ty">2023.12</div><div class="tx">착수</div></div><div class="tll"></div>
+      <div class="td"><div class="tc"></div><div class="ty">2024</div><div class="tx">설계</div></div><div class="tll"></div>
+      <div class="td"><div class="tc"></div><div class="ty">2025</div><div class="tx">구축</div></div><div class="tll"></div>
+      <div class="td"><div class="tc" style="background:var(--a);box-shadow:0 0 12px var(--a)"></div><div class="ty" style="color:var(--a)" id="tlEnd">2026.12</div><div class="tx">완료</div></div>
+    </div>
+  </div></div>
+
+  <!-- 10 · For citizens -->
+  <div class="sc" data-s="10" data-zone="core"><div class="bg" style="background-image:url('https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=1920&q=80')"></div><div class="ov"></div><div class="ct">
+    <div class="sl">For Citizens · 시민의 내일</div>
+    <h1 class="st">시민의 일상이<br><span class="h">이렇게 바뀝니다</span></h1>
+    <p class="sd">전자시민증 하나로 편리하게 · AI와 순찰로봇이 24시간 안전<br>부르면 오는 버스 · 온천 옆 스마트하우스 워케이션</p>
+    <div class="pills"><span class="pill g">📱 전자시민증</span><span class="pill b">🤖 순찰로봇</span><span class="pill g">🚌 DRT 교통</span><span class="pill o">🏠 워케이션</span><span class="pill b">🌐 스마트 환경</span><span class="pill g">💡 리빙랩</span></div>
+  </div></div>
+
+  <!-- 11 · Closing -->
+  <div class="sc" data-s="11" data-zone="core"><div class="bg" style="background-image:url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80')"></div><div class="ov" style="background:radial-gradient(ellipse at center,rgba(0,0,0,.3),rgba(0,0,0,.72))"></div><div class="ct">
+    <div class="sl">Asan Compact Smart City</div>
+    <h1 class="st"><span class="h">스마트한 내일</span>,<br>아산에서 시작합니다</h1>
+    <div class="pills" style="margin-top:34px"><span class="pill w">아산시</span><span class="pill w">제일엔지니어링</span><span class="pill w">호서대학교</span><span class="pill w">충남연구원</span><span class="pill w">KAIST</span></div>
+    <p class="sd" style="margin-top:26px;font-size:14px;color:rgba(255,255,255,.4)">국토교통부 · 충청남도 · 아산시</p>
+  </div></div>
+
+</div>
+
+<!-- Chapter chip -->
+<div id="chip"><span class="idx" id="chipIdx">01</span><span class="ctitle" id="chipTitle">오프닝</span><span class="zone core" id="chipZone">Intro</span></div>
+
+<!-- AI presenter avatar -->
+<div id="ai-avatar">
+  <div class="avatar-container">
+    <div class="avatar-body">
+      <svg width="120" height="140" viewBox="0 0 120 140" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="60" cy="42" rx="32" ry="36" fill="#1a1a2e"/>
+        <rect x="52" y="68" width="16" height="14" rx="4" fill="#f0c8a0"/>
+        <path d="M30,140 L30,100 Q30,82 60,82 Q90,82 90,100 L90,140 Z" fill="#1a3a5c"/>
+        <path d="M52,82 L60,100 L68,82" fill="#f8f8f8" opacity="0.9"/>
+        <path d="M52,82 L56,95 L64,95 L68,82" fill="#ffffff" opacity="0.85"/>
+        <ellipse cx="60" cy="44" rx="25" ry="28" fill="#f5d0a8"/>
+        <path d="M35,38 Q35,12 60,12 Q85,12 85,38 Q82,22 60,20 Q38,22 35,38Z" fill="#1a1a2e"/>
+        <path d="M35,38 Q32,38 30,60 Q32,52 36,44Z" fill="#1a1a2e"/>
+        <path d="M85,38 Q88,38 90,60 Q88,52 84,44Z" fill="#1a1a2e"/>
+        <path d="M45,34 Q50,31 55,34" stroke="#2a2a3e" stroke-width="1.5" fill="none"/>
+        <path d="M65,34 Q70,31 75,34" stroke="#2a2a3e" stroke-width="1.5" fill="none"/>
+        <g class="eye-group"><ellipse cx="50" cy="40" rx="5" ry="5" fill="white"/><ellipse cx="50" cy="40" rx="3" ry="3" fill="#2a1810"/><ellipse cx="51" cy="39" rx="1.2" ry="1.2" fill="white"/></g>
+        <g class="eye-r"><ellipse cx="70" cy="40" rx="5" ry="5" fill="white"/><ellipse cx="70" cy="40" rx="3" ry="3" fill="#2a1810"/><ellipse cx="71" cy="39" rx="1.2" ry="1.2" fill="white"/></g>
+        <path d="M59,46 Q60,50 61,46" stroke="#d4a880" stroke-width="1" fill="none"/>
+        <ellipse id="mouth-shape" cx="60" cy="56" rx="6" ry="2" fill="#c47070"/>
+        <path d="M54,55 Q60,60 66,55" stroke="#c47070" stroke-width="0.5" fill="none" opacity="0.3"/>
+        <circle cx="35" cy="50" r="2" fill="#00d4aa" opacity="0.7"/>
+        <circle cx="85" cy="50" r="2" fill="#00d4aa" opacity="0.7"/>
+      </svg>
+    </div>
+    <div class="avatar-glow"></div>
+  </div>
+  <div class="avatar-label"><span class="status-dot"></span>AI 아나운서</div>
+</div>
+
+<!-- Narration caption (== spoken audio) -->
+<div id="cap"><div class="inner" id="capTxt"></div></div>
+
+<div id="prg"></div>
+
+<div id="cz">
+  <span class="hu" id="tmr">00:00 / 05:27</span>
+  <button onclick="pv()" aria-label="이전 장면">◀ 이전</button>
+  <button class="py" id="pbtn" onclick="tp()" aria-label="재생 또는 정지">⏸ 정지</button>
+  <button onclick="nx()" aria-label="다음 장면">다음 ▶</button>
+  <button onclick="tm()" id="mb" aria-label="음소거 전환">🔇 음소거</button>
+  <span class="hu" id="scn">01 / 12</span>
+</div>
+
+<!-- Start overlay (satisfies autoplay gesture requirement) -->
+<div id="start">
+  <div class="sload" id="sload">오디오 준비 중…</div>
+  <h2><span class="h">아산시</span> 강소형 스마트시티<br>홍보 영상</h2>
+  <button class="go" id="goBtn" onclick="startShow()" disabled>▶ 재생 준비 중</button>
+</div>
+
+<script>
+"use strict";
+
+/* =========================================================================
+   CONFIG — 감사 대응용 단일 관리 지점
+   ※ 아래 수치·기간은 "화면"에만 반영됩니다. 음성(mp3)은 별도 재생성 필요.
+   ========================================================================= */
+const CFG = {
+  budget: 240,   // 총 사업비(억원)
+  units: 9,      // 단위사업 수  ← 음성 나레이션과 동일하게 9로 설정 (기존 화면은 17이었음 / 확인 필요)
+  cctv: 15,      // AI CCTV(대)  ← 음성 나레이션 기준
+  orgs: 5,       // 참여기관 수
+  labs: 5,       // 리빙랩 팀 수
+  timelineEnd: "2026.12"  // 완료 시점(타임라인 표기) ← 음성이 "2026년 12월"이라 화면도 2026.12로 일치시킴
+};
+
+/* 챕터 메타 (chip 표시용) */
+const CH = [
+  {t:"오프닝",           z:"Intro",  zc:"core"},
+  {t:"도시 과제",        z:"Challenge",zc:"core"},
+  {t:"듀얼존 전략",      z:"Strategy",zc:"dual"},
+  {t:"도고 디지털 OASIS", z:"도고 · Warm",zc:"warm"},
+  {t:"이노베이션 스퀘어", z:"배방 · Cool",zc:"cool"},
+  {t:"통합 스마트 서비스", z:"Platform",zc:"cool"},
+  {t:"DRT 모빌리티",     z:"Mobility",zc:"dual"},
+  {t:"사업 추진체계",     z:"Consortium",zc:"core"},
+  {t:"리빙랩",           z:"Living Lab",zc:"core"},
+  {t:"숫자로 보는 사업",  z:"Impact",zc:"core"},
+  {t:"시민 혜택",        z:"Citizens",zc:"core"},
+  {t:"클로징",           z:"Closing",zc:"core"}
+];
+
+/* 나레이션 자막 — 실제 음성(mp3)과 동일한 원고 (narration_script 기준) */
+const NARR = [
+"안녕하세요. 충청남도 아산시가 추진하는 강소형 스마트시티 조성사업을 소개합니다. 디지털 OASIS 구현을 통한 지역경제 활성화와 데이터 기반 스마트시티 조성 — 국비와 지방비를 합쳐 총 240억 원이 투입되는, 국토교통부 공모로 선정된 대규모 프로젝트입니다.",
+"아산시는 지금 세 가지 과제에 직면해 있습니다. 도고온천 일대를 포함한 서남생활권 인구가 10년간 20% 감소하며 지역소멸 위기에 놓였고, 동쪽 배방 신도시와 서쪽 도고 구도심의 발전 격차는 점점 커지고 있습니다. 이를 스마트 기술로 해결하기 위해 이 사업이 시작되었습니다.",
+"아산시는 두 곳에 혁신 거점을 만들고 있습니다. 서쪽 도고온천 일대에는 디지털 OASIS 존을 조성합니다. OASIS는 Office·Activity·Study·Innovation·Spot의 머리글자로, 일하고 쉬고 배우는 모든 것이 가능한 워케이션 거점입니다. 동쪽 배방에는 이노베이션 존을 구축해 데이터 기반 스마트 서비스와 창업 생태계를 만들어갑니다.",
+"도고 디지털 OASIS 존을 소개합니다. 파라다이스 스파 도고 인근 부지에 이동식 체류형 스마트하우스 약 30호가 배치되어, 온천과 자연 속에서 일하며 쉬는 새로운 워케이션을 경험할 수 있습니다. AI CCTV 15대와 스마트폴, 순찰로봇이 관광객의 안전을 지키고, 24시간 무인매장과 고속 와이파이 네트워크도 함께 구축됩니다.",
+"배방 이노베이션 존의 중심에는 KTX 천안아산역에서 도보 10분 거리에 위치한 아산 이노베이션 스퀘어가 있습니다. 호서대학교 온라인교육관에 조성된 이 공간은, 지하 1층에 대형 LED 월과 스마트시티 홍보관·회의실·서버실을, 지하 2층에는 공유오피스와 오픈스튜디오, 크로마키 촬영 공간까지 갖추었습니다. 창업기업을 유치하고 비즈니스 인큐베이팅을 지원하는 아산의 혁신 거점입니다.",
+"두 거점을 하나로 연결하는 스마트 서비스를 소개합니다. 모바일 전자시민증은 신분 확인부터 할인 혜택, 시설 예약까지 한 번에 해결할 수 있는 서비스입니다. 디지털 노마드를 위한 워케이션 운영·거래 관리 플랫폼이 가동되고, AI 기반 시설 관제 시스템이 도시 전체를 실시간으로 모니터링합니다. 관광·교통·환경 데이터를 수집·분석하는 디지털 OASIS 정보관리 서비스도 함께 운영됩니다.",
+"새로운 교통 서비스 DRT도 도입됩니다. DRT는 정해진 노선 없이, 앱으로 부르면 원하는 시간에 원하는 장소로 데려다주는 수요응답형 교통수단입니다. 지역 민간운수사업자와 아산시 마중버스를 연계하여, KTX 천안아산역에서 이노베이션 스퀘어를 거쳐 OASIS 스팟과 도고온천까지, 아산의 동쪽과 서쪽을 하나로 연결합니다.",
+"이 사업은 아산시가 시행기관으로 총괄하고, 네 개 컨소시엄사가 함께 추진합니다. 직접보조사업자인 제일엔지니어링이 사업 관리와 기술 자문을 수행하고, 간접보조사업자로 호서대학교가 이노베이션 스퀘어 운영과 리빙랩을, 충남연구원이 거버넌스 구축과 정책 연구를, 카이스트가 첨단기술 연구와 자문을 맡고 있습니다.",
+"리빙랩은 시민이 직접 참여해서 우리 동네의 문제를 함께 찾고 해결하는 프로그램입니다. 지금 다섯 개 팀이 다문화 가정 연결, 골목길 도시재생, 청년 정착 지원, 마을 이야기 디지털 기록, 그리고 숨은 골목 관광 코스 발굴 활동을 이어가며, 시민의 아이디어가 실제 정책으로 이어지고 있습니다.",
+"아산 스마트시티를 숫자로 정리해 보겠습니다. 총 사업비 240억 원, 9개 단위사업, AI CCTV 15대, 5개 참여기관, 그리고 5개 리빙랩 팀이 함께하고 있습니다. 2023년 12월에 착수한 이 사업은, 2026년 12월 완료를 목표로 힘차게 나아가고 있습니다.",
+"이 모든 변화는 결국 시민 여러분의 일상을 위한 것입니다. 전자시민증 하나로 편리하게 생활하고, AI와 순찰로봇이 24시간 우리 동네를 안전하게 지켜줍니다. 앱 하나로 부르는 스마트 버스, 온천 옆 스마트하우스에서 즐기는 워케이션, 그리고 내 아이디어가 실제 정책이 되는 도시. 이것이 아산 스마트시티가 그리는 시민의 내일입니다.",
+"스마트한 내일, 아산에서 시작합니다. 감사합니다."
+];
+
+const TOT = 12, LAST = TOT - 1;
+/* 폴백 재생시간(초) — 메타데이터 로드 전/오디오 실패 시 사용 */
+const FALLBACK = [24.8,27.7,30.7,30.2,35.2,35.0,31.2,24.2,28.9,23.6,31.6,4.0];
+
+/* ---- state ---- */
+let cur = 0, playing = false, muted = false, transiting = false;
+let failTimer = null;
+const audioPool = {};
+const durs = FALLBACK.slice();
+
+/* ---- element refs ---- */
+const $ = id => document.getElementById(id);
+const scenes = [...document.querySelectorAll('.sc')];
+
+/* =========================================================================
+   Audio preloading
+   ========================================================================= */
+function preload(){
+  let ready = 0;
+  for(let i=0;i<TOT;i++){
+    const a = new Audio();
+    a.preload = 'auto';
+    a.src = 'audio/s'+i+'.mp3';
+    a.addEventListener('loadedmetadata', ()=>{ if(isFinite(a.duration)) durs[i]=a.duration; recalc(); }, {once:true});
+    a.addEventListener('timeupdate', ()=>onTime(i));
+    a.addEventListener('ended', ()=>onEnded(i));
+    a.addEventListener('error', ()=>onAudioError(i), {once:true});
+    const done = ()=>{ ready++; if(ready>=TOT) enableStart(); };
+    a.addEventListener('canplaythrough', done, {once:true});
+    a.addEventListener('error', done, {once:true});
+    audioPool[i]=a;
+  }
+  // safety: enable start button even if some assets stall
+  setTimeout(enableStart, 3500);
+}
+function enableStart(){
+  const b=$('goBtn'); if(b.disabled){ b.disabled=false; b.textContent='▶ 재생 시작'; $('sload').textContent='준비 완료'; }
+}
+
+/* cumulative start times for continuous progress bar */
+let cumStart = [], totalDur = 0;
+function recalc(){
+  cumStart=[]; let acc=0;
+  for(let i=0;i<TOT;i++){ cumStart[i]=acc; acc+=durs[i]; }
+  totalDur=acc;
+  updateTimer(getElapsed());
+}
+recalc();
+
+/* =========================================================================
+   Scene rendering
+   ========================================================================= */
+function renderScene(i){
+  // crossfade scene layers
+  scenes.forEach(s=>{
+    const on = (+s.dataset.s === i);
+    s.classList.toggle('on', on);
+    const bg=s.querySelector('.bg');
+    if(bg){
+      if(on){ bg.style.animation='none'; void bg.offsetWidth; bg.style.animation=''; }
+      else { bg.style.animation='none'; }
+    }
+  });
+  // chip
+  const c=CH[i];
+  $('chipIdx').textContent=String(i+1).padStart(2,'0');
+  $('chipTitle').textContent=c.t;
+  const zEl=$('chipZone'); zEl.textContent=c.z; zEl.className='zone '+c.zc;
+  $('chip').classList.add('show');
+  $('scn').textContent=String(i+1).padStart(2,'0')+' / 12';
+  // caption: fade out -> swap -> fade in (never a hard pop)
+  const cap=$('cap');
+  cap.classList.remove('show');
+  setTimeout(()=>{ $('capTxt').textContent=NARR[i]; cap.classList.add('show'); }, 300);
+  // count-up stats on scene 9
+  if(i===9) animateStats();
+}
+
+/* animate the numbers on the impact scene from CFG (single source of truth) */
+let statsDone=false;
+function animateStats(){
+  const row=$('statRow');
+  row.querySelectorAll('.stat-n[data-k]').forEach((el,j)=>{
+    const target=CFG[el.dataset.k]||0;
+    setTimeout(()=>countUp(el,0,target,1300),500+j*160);
+  });
+  $('tlEnd').textContent=CFG.timelineEnd;
+}
+function countUp(el,from,to,d){
+  const start=performance.now();
+  (function step(now){
+    const p=Math.min((now-start)/d,1);
+    el.textContent=Math.round(from+(to-from)*(1-Math.pow(1-p,3)));
+    if(p<1)requestAnimationFrame(step);
+  })(performance.now());
+}
+
+/* =========================================================================
+   Playback engine — scenes advance seamlessly with audio
+   Visual crossfade begins ~0.4s BEFORE audio ends, so the next scene is
+   already rising when the next narration starts -> no dead air, no hard cut.
+   ========================================================================= */
+function stopAudio(){
+  clearTimeout(failTimer); failTimer=null;
+  Object.values(audioPool).forEach(a=>{ try{a.pause();a.currentTime=0;}catch(e){} });
+  setSpeaking(false);
+}
+function setSpeaking(on){
+  const av=$('ai-avatar');
+  av.classList.toggle('speaking', on);
+  av.classList.add('visible');
+}
+
+function playAudio(i){
+  clearTimeout(failTimer); failTimer=null;
+  const a=audioPool[i];
+  if(!a){ scheduleFallback(i); return; }
+  a.muted = muted;
+  a.currentTime = 0;
+  setSpeaking(true);
+  const pr=a.play();
+  if(pr&&pr.catch)pr.catch(()=>scheduleFallback(i));
+}
+/* if audio can't play (blocked/broken), advance on a timer instead */
+function scheduleFallback(i){
+  setSpeaking(true);
+  clearTimeout(failTimer);
+  failTimer=setTimeout(()=>{ if(playing) onEnded(i,true); }, (durs[i]||6)*1000);
+}
+function onAudioError(i){ if(playing && cur===i) scheduleFallback(i); }
+
+function onTime(i){
+  if(!playing || cur!==i) return;
+  const a=audioPool[i];
+  updateTimer(cumStart[i]+(a.currentTime||0));
+  updateProgress(cumStart[i]+(a.currentTime||0));
+  // pre-start the visual crossfade near the tail of the narration
+  if(!transiting && i<LAST && a.duration && a.currentTime >= a.duration-0.45){
+    transiting=true;
+    renderScene(i+1);   // begins 0.9s crossfade + caption swap
+  }
+}
+
+function onEnded(i, viaFallback){
+  if(!playing) return;
+  if(i<LAST){
+    cur=i+1;
+    if(!transiting) renderScene(cur); // manual/edge: ensure visual matches
+    transiting=false;
+    setSpeaking(false);
+    // brief cinematic beat, then continue (scene is already mid-fade-in)
+    setTimeout(()=>{ if(playing) playAudio(cur); }, viaFallback?250:120);
+  } else {
+    finish();
+  }
+}
+
+function finish(){
+  playing=false; transiting=false;
+  stopAudio();
+  $('pbtn').textContent='↻ 처음부터';
+  updateProgress(totalDur);
+  updateTimer(totalDur);
+}
+
+/* =========================================================================
+   Progress + timer
+   ========================================================================= */
+function getElapsed(){
+  const a=audioPool[cur];
+  const t=(a&&isFinite(a.currentTime))?a.currentTime:0;
+  return (cumStart[cur]||0)+t;
+}
+function updateProgress(sec){
+  const pct=totalDur?Math.min(sec/totalDur,1)*100:0;
+  $('prg').style.width=pct+'%';
+}
+function updateTimer(sec){
+  const fmt=s=>String(Math.floor(s/60)).padStart(2,'0')+':'+String(Math.floor(s%60)).padStart(2,'0');
+  $('tmr').textContent=fmt(sec)+' / '+fmt(totalDur);
+}
+
+/* =========================================================================
+   Controls
+   ========================================================================= */
+function startShow(){
+  $('start').classList.add('hide');
+  setTimeout(()=>$('start').remove(), 700);
+  playing=true; transiting=false;
+  $('pbtn').textContent='⏸ 정지';
+  renderScene(cur);
+  playAudio(cur);
+}
+
+function tp(){ // play / pause / restart
+  const b=$('pbtn');
+  if(b.textContent.indexOf('처음')>-1){ cur=0; playing=true; b.textContent='⏸ 정지'; renderScene(0); playAudio(0); return; }
+  if(playing){
+    playing=false; b.textContent='▶ 재생'; stopAudio();
+  } else {
+    playing=true; b.textContent='⏸ 정지'; transiting=false; renderScene(cur); playAudio(cur);
+  }
+}
+function nx(){ if(cur<LAST){ cur++; goManual(); } }
+function pv(){ if(cur>0){ cur--; goManual(); } }
+function goManual(){
+  transiting=false; stopAudio();
+  renderScene(cur);
+  updateProgress(cumStart[cur]); updateTimer(cumStart[cur]);
+  if(playing) playAudio(cur);
+}
+function tm(){
+  muted=!muted;
+  $('mb').textContent=muted?'🔊 소리 켜기':'🔇 음소거';
+  Object.values(audioPool).forEach(a=>a.muted=muted);
+}
+
+document.addEventListener('keydown',e=>{
+  if($('start') && !$('start').classList.contains('hide')){ if(e.key===' '||e.key==='Enter'){e.preventDefault();startShow();} return; }
+  if(e.key==='ArrowRight'){e.preventDefault();nx();}
+  else if(e.key==='ArrowLeft'){e.preventDefault();pv();}
+  else if(e.key===' '){e.preventDefault();tp();}
+  else if(e.key==='m'){tm();}
+  else if(e.key==='f'){document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen();}
+});
+
+/* ---- init ---- */
+preload();
+renderScene(0);
+$('cap').classList.remove('show');
+$('capTxt').textContent=NARR[0];
+setTimeout(()=>$('cap').classList.add('show'), 400);
+</script>
+</body>
+</html>
