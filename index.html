@@ -140,31 +140,54 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#fff;font
 #ai-avatar.speaking ~ #cap .inner::before{animation:capdot 1s infinite}
 @keyframes capdot{0%,100%{opacity:.4}50%{opacity:1}}
 
-/* ---- AI presenter avatar (narrator persona) ---- */
+/* ---- AI presenter avatar — photo-based broadcast frame ---- */
 #ai-avatar{position:fixed;bottom:126px;right:30px;z-index:65;
   display:flex;flex-direction:column;align-items:center;pointer-events:none;
   opacity:0;transform:translateY(12px);transition:opacity .5s,transform .5s}
 #ai-avatar.visible{opacity:1;transform:translateY(0)}
-#ai-avatar.speaking{transform:scale(1.04)}
-.avatar-container{width:126px;height:150px;position:relative;filter:drop-shadow(0 10px 26px rgba(0,212,170,.4))}
-.avatar-body svg{width:126px;height:150px;animation:breathe 3.4s ease-in-out infinite}
-@keyframes breathe{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
-.avatar-glow{position:absolute;bottom:-10px;left:50%;transform:translateX(-50%);
-  width:120px;height:26px;background:radial-gradient(ellipse,rgba(0,212,170,.4),transparent 70%);
-  border-radius:50%;filter:blur(9px);animation:glowPulse 2.6s ease-in-out infinite}
-@keyframes glowPulse{0%,100%{opacity:.5}50%{opacity:1}}
-.avatar-label{font-size:12px;color:var(--p);margin-top:8px;background:rgba(0,0,0,.85);
-  padding:5px 13px;border-radius:20px;border:1.5px solid rgba(0,212,170,.5);
-  letter-spacing:1px;font-weight:600;display:flex;align-items:center;gap:6px}
+#ai-avatar.speaking{transform:scale(1.03)}
+.pframe{width:148px;height:148px;position:relative;border-radius:50%;
+  filter:drop-shadow(0 12px 30px rgba(0,0,0,.55))}
+/* rotating gradient ring — spins while speaking */
+.pring{position:absolute;inset:-5px;border-radius:50%;
+  background:conic-gradient(from 0deg,var(--p),var(--a),transparent 40%,var(--p) 65%,var(--a));
+  opacity:.55;transition:opacity .4s}
+#ai-avatar.speaking .pring{opacity:1;animation:ringSpin 2.4s linear infinite}
+@keyframes ringSpin{to{transform:rotate(360deg)}}
+.pring2{position:absolute;inset:-11px;border-radius:50%;border:1px solid rgba(0,212,170,.25);
+  transition:all .4s}
+#ai-avatar.speaking .pring2{border-color:rgba(0,212,170,.55);
+  box-shadow:0 0 26px rgba(0,212,170,.4),inset 0 0 18px rgba(0,212,170,.12);
+  animation:ringPulse 1.6s ease-in-out infinite}
+@keyframes ringPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.045)}}
+.pphoto{position:absolute;inset:0;border-radius:50%;overflow:hidden;
+  border:3px solid rgba(7,9,15,.9);background:#0a0f18}
+.pphoto img{width:100%;height:100%;object-fit:cover;display:block;
+  animation:breathe 4.2s ease-in-out infinite}
+@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.02)}}
+/* LIVE badge */
+.plive{position:absolute;top:-2px;right:-2px;z-index:2;
+  font-family:'Rajdhani';font-size:9px;letter-spacing:1.5px;font-weight:700;color:#fff;
+  background:linear-gradient(135deg,#ff4d5e,#ff7a45);padding:3px 9px;border-radius:20px;
+  border:1.5px solid rgba(0,0,0,.5);opacity:0;transform:scale(.8);transition:all .35s}
+#ai-avatar.speaking .plive{opacity:1;transform:scale(1)}
+/* audio EQ bars under the portrait */
+.peq{display:flex;align-items:flex-end;gap:3px;height:16px;margin-top:9px}
+.peq span{width:3.5px;border-radius:2px;background:linear-gradient(180deg,var(--a),var(--p));
+  height:4px;opacity:.35;transition:opacity .3s}
+#ai-avatar.speaking .peq span{opacity:1;animation:eq .7s ease-in-out infinite}
+.peq span:nth-child(1){animation-delay:0s}.peq span:nth-child(2){animation-delay:.12s}
+.peq span:nth-child(3){animation-delay:.24s}.peq span:nth-child(4){animation-delay:.06s}
+.peq span:nth-child(5){animation-delay:.18s}.peq span:nth-child(6){animation-delay:.3s}
+.peq span:nth-child(7){animation-delay:.09s}
+@keyframes eq{0%,100%{height:4px}50%{height:15px}}
+.avatar-label{font-size:12px;color:var(--p);margin-top:7px;background:rgba(0,0,0,.85);
+  padding:5px 14px;border-radius:20px;border:1.5px solid rgba(0,212,170,.5);
+  letter-spacing:1px;font-weight:600;display:flex;align-items:center;gap:7px}
+.avatar-label small{color:rgba(255,255,255,.45);font-weight:400;letter-spacing:.5px}
 .status-dot{width:8px;height:8px;border-radius:50%;background:#888;transition:all .3s}
 #ai-avatar.speaking .status-dot{background:var(--p);box-shadow:0 0 12px var(--p);animation:dotPulse 1s infinite}
 @keyframes dotPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.35)}}
-#mouth-shape{transition:all .1s}
-#ai-avatar.speaking #mouth-shape{animation:mouthMove .32s ease-in-out infinite alternate}
-@keyframes mouthMove{0%{ry:2;rx:6}50%{ry:5;rx:7}100%{ry:3;rx:5}}
-.eye-group,.eye-r{transform-origin:center;animation:blink 4s ease-in-out infinite}
-.eye-r{animation-delay:.1s}
-@keyframes blink{0%,96%,100%{transform:scaleY(1)}98%{transform:scaleY(.1)}}
 
 /* ---- Progress bar (continuous, audio-driven) ---- */
 #prg{position:fixed;bottom:48px;left:0;height:3px;width:0;
@@ -198,11 +221,13 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#fff;font
 #start .go:disabled{opacity:.5;cursor:wait}
 
 @media(max-width:1100px){.sc .ct{padding:48px 30px 150px}#ai-avatar{bottom:110px;right:14px}
-  .avatar-container{width:104px;height:124px}.avatar-body svg{width:104px;height:124px}}
+  .pframe{width:118px;height:118px}}
 @media(max-width:768px){.sc .ct{padding:40px 20px 150px}#chip{top:14px;left:14px;padding:7px 14px 7px 10px}
-  #chip .ctitle{display:none}#cap{bottom:78px}#cap .inner{padding:11px 18px;font-size:13px}
-  #ai-avatar{bottom:96px;right:8px}.avatar-container{width:80px;height:96px}.avatar-body svg{width:80px;height:96px}
-  .avatar-label{font-size:10px;padding:3px 9px}}
+  #chip .ctitle{display:none}#cap{bottom:78px;max-width:78vw;transform:translateX(-58%)}
+  #cap .inner{padding:11px 18px;font-size:13px}
+  #ai-avatar{bottom:96px;right:8px}.pframe{width:84px;height:84px}
+  .avatar-label{font-size:10px;padding:3px 9px}.avatar-label small{display:none}
+  .peq{height:12px;margin-top:6px}}
 @media(prefers-reduced-motion:reduce){
   .sc,.sc.on{transition:opacity .4s ease;transform:none!important}
   .sc.on .bg{animation:none}
@@ -218,7 +243,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#fff;font
     <div class="sl">국토교통부 · 충청남도 · 아산시 | 강소형 스마트시티 조성사업</div>
     <h1 class="st"><span class="h">아산시</span> 강소형<br>스마트시티</h1>
     <p class="sd">디지털 OASIS 구현을 통한 지역경제 활성화와<br>데이터 기반 스마트시티 조성</p>
-    <div class="pills"><span class="pill g">국가보조사업 · 총사업비 240억원</span><span class="pill b">2개 혁신거점</span><span class="pill w">1개 시행기관 + 4개 컨소시엄</span><span class="pill o">2023.12 ~ 2026.12</span></div>
+    <div class="pills"><span class="pill g">국가보조사업 · 총사업비 240억원</span><span class="pill b">2개 혁신거점</span><span class="pill w">1개 시행기관 + 4개 컨소시엄사</span><span class="pill o">2023.12 ~ 2025.12.31</span></div>
   </div></div>
 
   <!-- 1 · Challenge -->
@@ -283,7 +308,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#fff;font
     <div class="gov">
       <div class="gov-lead"><div class="role">시행기관</div><h4>아산시</h4><p>사업 총괄 · 예산 집행 · 행정 지원</p></div>
       <div class="gov-conn"></div>
-      <div class="gov-tier">↓ 직접보조사업자 (수행기관 · PMO)</div>
+      <div class="gov-tier">↓ 수행기관 · 직접보조사업자 (PMO)</div>
       <div class="cg" style="margin-bottom:16px">
         <div class="cc direct"><h4>제일엔지니어링</h4><div class="cr">직접보조 · PMO</div><p>사업관리 · 기술자문 · 조달총괄</p></div>
       </div>
@@ -317,9 +342,9 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#fff;font
     </div>
     <div class="tl">
       <div class="td"><div class="tc"></div><div class="ty">2023.12</div><div class="tx">착수</div></div><div class="tll"></div>
-      <div class="td"><div class="tc"></div><div class="ty">2024</div><div class="tx">설계</div></div><div class="tll"></div>
-      <div class="td"><div class="tc"></div><div class="ty">2025</div><div class="tx">구축</div></div><div class="tll"></div>
-      <div class="td"><div class="tc" style="background:var(--a);box-shadow:0 0 12px var(--a)"></div><div class="ty" style="color:var(--a)" id="tlEnd">2026.12</div><div class="tx">완료</div></div>
+      <div class="td"><div class="tc"></div><div class="ty">2024</div><div class="tx">설계·조달</div></div><div class="tll"></div>
+      <div class="td"><div class="tc"></div><div class="ty">2025</div><div class="tx">구축·운영</div></div><div class="tll"></div>
+      <div class="td"><div class="tc" style="background:var(--a);box-shadow:0 0 12px var(--a)"></div><div class="ty" style="color:var(--a)" id="tlEnd">2025.12.31</div><div class="tx">완료</div></div>
     </div>
   </div></div>
 
@@ -344,34 +369,16 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#fff;font
 <!-- Chapter chip -->
 <div id="chip"><span class="idx" id="chipIdx">01</span><span class="ctitle" id="chipTitle">오프닝</span><span class="zone core" id="chipZone">Intro</span></div>
 
-<!-- AI presenter avatar -->
+<!-- AI presenter avatar (photo-based) -->
 <div id="ai-avatar">
-  <div class="avatar-container">
-    <div class="avatar-body">
-      <svg width="120" height="140" viewBox="0 0 120 140" xmlns="http://www.w3.org/2000/svg">
-        <ellipse cx="60" cy="42" rx="32" ry="36" fill="#1a1a2e"/>
-        <rect x="52" y="68" width="16" height="14" rx="4" fill="#f0c8a0"/>
-        <path d="M30,140 L30,100 Q30,82 60,82 Q90,82 90,100 L90,140 Z" fill="#1a3a5c"/>
-        <path d="M52,82 L60,100 L68,82" fill="#f8f8f8" opacity="0.9"/>
-        <path d="M52,82 L56,95 L64,95 L68,82" fill="#ffffff" opacity="0.85"/>
-        <ellipse cx="60" cy="44" rx="25" ry="28" fill="#f5d0a8"/>
-        <path d="M35,38 Q35,12 60,12 Q85,12 85,38 Q82,22 60,20 Q38,22 35,38Z" fill="#1a1a2e"/>
-        <path d="M35,38 Q32,38 30,60 Q32,52 36,44Z" fill="#1a1a2e"/>
-        <path d="M85,38 Q88,38 90,60 Q88,52 84,44Z" fill="#1a1a2e"/>
-        <path d="M45,34 Q50,31 55,34" stroke="#2a2a3e" stroke-width="1.5" fill="none"/>
-        <path d="M65,34 Q70,31 75,34" stroke="#2a2a3e" stroke-width="1.5" fill="none"/>
-        <g class="eye-group"><ellipse cx="50" cy="40" rx="5" ry="5" fill="white"/><ellipse cx="50" cy="40" rx="3" ry="3" fill="#2a1810"/><ellipse cx="51" cy="39" rx="1.2" ry="1.2" fill="white"/></g>
-        <g class="eye-r"><ellipse cx="70" cy="40" rx="5" ry="5" fill="white"/><ellipse cx="70" cy="40" rx="3" ry="3" fill="#2a1810"/><ellipse cx="71" cy="39" rx="1.2" ry="1.2" fill="white"/></g>
-        <path d="M59,46 Q60,50 61,46" stroke="#d4a880" stroke-width="1" fill="none"/>
-        <ellipse id="mouth-shape" cx="60" cy="56" rx="6" ry="2" fill="#c47070"/>
-        <path d="M54,55 Q60,60 66,55" stroke="#c47070" stroke-width="0.5" fill="none" opacity="0.3"/>
-        <circle cx="35" cy="50" r="2" fill="#00d4aa" opacity="0.7"/>
-        <circle cx="85" cy="50" r="2" fill="#00d4aa" opacity="0.7"/>
-      </svg>
-    </div>
-    <div class="avatar-glow"></div>
+  <div class="pframe">
+    <div class="pring"></div>
+    <div class="pring2"></div>
+    <div class="pphoto"><img src="presenter.jpg" alt="AI 아나운서"></div>
+    <div class="plive">● LIVE</div>
   </div>
-  <div class="avatar-label"><span class="status-dot"></span>AI 아나운서</div>
+  <div class="peq"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+  <div class="avatar-label"><span class="status-dot"></span>AI 아나운서 <small>· 디지털 OASIS</small></div>
 </div>
 
 <!-- Narration caption (== spoken audio) -->
@@ -408,7 +415,8 @@ const CFG = {
   cctv: 15,      // AI CCTV(대)  ← 음성 나레이션 기준
   orgs: 5,       // 참여기관 수
   labs: 5,       // 리빙랩 팀 수
-  timelineEnd: "2026.12"  // 완료 시점(타임라인 표기) ← 음성이 "2026년 12월"이라 화면도 2026.12로 일치시킴
+  timelineEnd: "2025.12.31"  // 완료 시점 — 사업기간 2023.12 ~ 2025.12.31 (사업자 확정)
+                             // ※ s9.mp3 음성은 "2026년 12월"로 녹음되어 있어 재생성 필요 (narration_script_v2.md 참조)
 };
 
 /* 챕터 메타 (chip 표시용) */
@@ -438,7 +446,7 @@ const NARR = [
 "새로운 교통 서비스 DRT도 도입됩니다. DRT는 정해진 노선 없이, 앱으로 부르면 원하는 시간에 원하는 장소로 데려다주는 수요응답형 교통수단입니다. 지역 민간운수사업자와 아산시 마중버스를 연계하여, KTX 천안아산역에서 이노베이션 스퀘어를 거쳐 OASIS 스팟과 도고온천까지, 아산의 동쪽과 서쪽을 하나로 연결합니다.",
 "이 사업은 아산시가 시행기관으로 총괄하고, 네 개 컨소시엄사가 함께 추진합니다. 직접보조사업자인 제일엔지니어링이 사업 관리와 기술 자문을 수행하고, 간접보조사업자로 호서대학교가 이노베이션 스퀘어 운영과 리빙랩을, 충남연구원이 거버넌스 구축과 정책 연구를, 카이스트가 첨단기술 연구와 자문을 맡고 있습니다.",
 "리빙랩은 시민이 직접 참여해서 우리 동네의 문제를 함께 찾고 해결하는 프로그램입니다. 지금 다섯 개 팀이 다문화 가정 연결, 골목길 도시재생, 청년 정착 지원, 마을 이야기 디지털 기록, 그리고 숨은 골목 관광 코스 발굴 활동을 이어가며, 시민의 아이디어가 실제 정책으로 이어지고 있습니다.",
-"아산 스마트시티를 숫자로 정리해 보겠습니다. 총 사업비 240억 원, 9개 단위사업, AI CCTV 15대, 5개 참여기관, 그리고 5개 리빙랩 팀이 함께하고 있습니다. 2023년 12월에 착수한 이 사업은, 2026년 12월 완료를 목표로 힘차게 나아가고 있습니다.",
+"아산 스마트시티를 숫자로 정리해 보겠습니다. 총 사업비 240억 원, 9개 단위사업, AI CCTV 15대, 5개 참여기관, 그리고 5개 리빙랩 팀이 함께하고 있습니다. 2023년 12월에 착수한 이 사업은, 2025년 12월 완료를 목표로 힘차게 나아가고 있습니다.",
 "이 모든 변화는 결국 시민 여러분의 일상을 위한 것입니다. 전자시민증 하나로 편리하게 생활하고, AI와 순찰로봇이 24시간 우리 동네를 안전하게 지켜줍니다. 앱 하나로 부르는 스마트 버스, 온천 옆 스마트하우스에서 즐기는 워케이션, 그리고 내 아이디어가 실제 정책이 되는 도시. 이것이 아산 스마트시티가 그리는 시민의 내일입니다.",
 "스마트한 내일, 아산에서 시작합니다. 감사합니다."
 ];
